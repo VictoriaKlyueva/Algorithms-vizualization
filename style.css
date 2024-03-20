@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "Inter";
+    src: local("Inter"), 
+         local("Inter-Bold"), 
+         url("/assets/fonts/Inter-regular.woff2") format("woff2");
+  }
+
+body {
+    background: #05010D;
+    color: #ffffff;
+    font-family: "Inter";
+}
+
+div.header {
+    margin-top: 20px;
+    font-size: 90%;
+}
