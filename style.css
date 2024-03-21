@@ -1,17 +1,76 @@
 @font-face {
-    font-family: "Inter";
+    font-family: "InterRegular";
     src: local("Inter"), 
-         local("Inter-Bold"), 
+         local("Inter-Regular"), 
          url("/assets/fonts/Inter-regular.woff2") format("woff2");
-  }
+}
+
+@font-face {
+    font-family: "InterMedium";
+    src: local("Inter"), 
+         local("Inter-Medium"), 
+         url("/assets/fonts/Inter-regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "InterLight";
+    src: local("Inter"), 
+         local("Inter-Light"), 
+         url("/assets/fonts/Inter-regular.woff2") format("woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
 
 body {
     background: #05010D;
     color: #ffffff;
-    font-family: "Inter";
+    font-family: "InterMedium";
 }
 
-div.header {
-    margin-top: 20px;
-    font-size: 90%;
+a {
+    color: #ffffff;
+    font-family: "InterLight";
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.site-header__wrapper {
+    position: sticky;
+    top: 0;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-family: "InterRegular";
+    width: 115px;
+    padding: 10px;
+    background: linear-gradient(to bottom right, #FF5B37, #AB0052);
+    color: rgba(255, 255, 255, 1);
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+}
+
+.neural_network {
+    float: right;
+}
+
+.youo {
+    background: linear-gradient(to bottom right, #FF5B37, #AB0052);
+    width: 90%;
+    height: 800px;
+    margin: auto;
+    padding-top: 30px;
+    border-radius: 30px;
+    background: #f5023D;
 }
