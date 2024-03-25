@@ -130,16 +130,27 @@ async function getfile(filename) {
 }
 
 async function main() {
+  // получаем веса
   const first_layer_para = await getfile("nn/first_layer_para.txt");
   const first_layer_bias = await getfile("nn/first_layer_bias.txt");
   const second_layer_para = await getfile("nn/second_layer_para.txt");
   const second_layer_bias = await getfile("nn/second_layer_bias.txt");
   
+  // задаем параметры модели
   const num_inputs = 28 * 28;
   const hidden_size = 300;
   const num_outputs = 10;
 
+  // создаем модель
   const model = new NeuralNetwork(num_inputs, hidden_size, num_outputs);
+
+  // задаем считанные веса
+  model.first_layer.para = first_layer_para;
+  model.first_layer.bias = first_layer_bias;
+  model.second_layer.para = second_layer_para;
+  model.second_layer.bias = second_layer_bias;
+
+  
 
   console.log("Программа завершена");
 }
