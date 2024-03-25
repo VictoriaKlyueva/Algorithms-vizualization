@@ -54,9 +54,10 @@ class NeuralNetwork {
     }
   
     forward(x, y) {
-      const z = this.matrixMultiply(this.first_layer.para, x).map((i) => [i]) + this.first_layer.bias;
+      const z = this.addMatrices(this.matrixMultiply(this.first_layer.para, x).map((i) => [i]), this.first_layer.bias);
+      console.log(typeof z);
       const h = this.activationFunction(z).map((i) => [i]);
-      const u = this.matrixMultiply(this.second_layer.para, h).map((i) => [i]) + this.second_layer.bias;
+      const u = this.addMatrices(this.matrixMultiply(this.second_layer.para, h).map((i) => [i]), this.second_layer.bias);
       const predictList = this.softmax(u).flat();
       const error = this.crossEntropyError(predictList, y);
   
@@ -80,31 +81,42 @@ class NeuralNetwork {
       }
       return matrix;
     }
-    
-    matrixMultiply(mat1, mat2) {
-      const result = [];
 
-      const rows1 = mat1.length;
-      const cols1 = mat1[0].length;
-      const rows2 = mat2.length;
-      const cols2 = mat2[0].length;
-  
-      if (cols1 != rows2) {
-        throw new Error('Matrix dimensions are not compatible for multiplication');
+    addMatrices(matrix1, matrix2) {
+      // Проверка, что размеры матриц совпадают
+      if (matrix1.length !== matrix2.length || matrix1[0].length !== matrix2[0].length) {
+        throw new Error('Размеры матриц не совпадают');
       }
-  
-      for (let i = 0; i < rows1; i++) {
-        result[i] = [];
-        for (let j = 0; j < cols2; j++) {
-          let sum = 0;
-          for (let k = 0; k < cols1; k++) {
-            sum += mat1[i][k] * mat2[k][j];
-          }
-          result[i][j] = sum;
+    
+      const result = [];
+    
+      for (let i = 0; i < matrix1.length; i++) {
+        const row1 = matrix1[i];
+        const row2 = matrix2[i];
+    
+        const newRow = [];
+    
+        for (let j = 0; j < row1.length; j++) {
+          newRow.push(row1[j] + row2[j]);
         }
+    
+        result.push(newRow);
       }
       return result;
     }
+    
+    matrixMultiply(a, b) {
+      let result = Array(a.length)
+      for (let i = 0; i < a.length; i++) {
+          let sum = 0;
+          for (let j = 0; j < a[0].length; j++) {
+              sum += a[i][j] * b[j]
+          }
+          result[i] = sum;
+      }
+      // console.log('mult ' + result);
+      return result;
+  }
 }
 
 function make_prediction(model, image) {
@@ -150,13 +162,17 @@ async function main() {
   model.second_layer.para = second_layer_para;
   model.second_layer.bias = second_layer_bias;
 
+  image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));
   
+  // console.log(model.first_layer.bias);
+  
+  console.log(make_prediction(model, image));
+
 
   console.log("Программа завершена");
 }
 
 main();
-
 
 // Usage
 /*
