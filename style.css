@@ -19,22 +19,18 @@
          url("/assets/fonts/Inter-regular.woff2") format("woff2");
 }
 
-img.background {
-    min-height: 100%;
-    min-width: 640px;
-    width: 100%;
-    height: auto;
-    position: fixed;
-    top: 0;
-    left: 0;
-  
-    /* Зависит от размера изображения */
-    @media screen and (max-width: 640px){
-      img.bg {
-        left: 50%;
-        margin-left: -320px;
-      }
-    }
+@font-face {
+    font-family: "InterBolditalic";
+    src: local("Inter"), 
+         local("Inter-Bolditalic"), 
+         url("/assets/fonts/Inter-regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "InterBold";
+    src: local("Inter"), 
+         local("Inter-Bold"), 
+         url("/assets/fonts/Inter-regular.woff2") format("woff2");
 }
 
 * {
@@ -43,7 +39,8 @@ img.background {
 }
 
 body {
-    background: #05010D;
+    background: url("images/background.jpg") ;
+    height: 100%;
     color: #ffffff;
     font-family: "InterMedium";
 }
@@ -56,48 +53,65 @@ a {
 }
 
 div.site-header__wrapper {
-    position: sticky;
-    top: 0;
-    margin: 0 auto;
+    margin: auto;
     padding-top: 20px;
     padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    width:100%;
+    width:80%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-div.brand {
-    font-family: "InterRegular";
-    width: 115px;
-    padding: 10px;
-    border: 2px solid linear-gradient(to bottom right, rgb(255, 91, 55), rgb(171, 0, 82));
-    background: linear-gradient(to bottom right, rgba(255, 91, 55, 0.6), rgba(171, 0, 82, 0.6));
-    color: linear-gradient(to bottom right, rgba(255, 91, 55, 1), rgba(171, 0, 82, 1));
-    border-radius: 15px;
-    -moz-border-radius: 15px;
 }
 
 a.neural_network_text {
     float: right;
 }
 
-div.main_info {
-    width: 90%;
-    height: 300px;
-    margin: auto;
-    padding-top: 30px;
-    border-radius: 30px;
-}
-
-div.first_algo_div {
-    background: linear-gradient(to bottom right, #FF5B37, #AB0052);
+div.vizualisation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 90%;
     height: 800px;
     margin: auto;
     padding-top: 30px;
     border-radius: 30px;
-    background: #f5023D;
+}
+
+div.vizualisation :nth-child(1) {
+    font-family: "InterBolditalic";
+    font-size: 80px;
+    color: transparent;    
+	-webkit-background-clip: text;
+	background-clip: text;
+	background-image: linear-gradient(to right, #F83A3A, #F13DD4, #7000FF);
+}
+
+div.vizualisation :nth-child(2) {
+    font-family: "InterBold";
+    font-size: 58px;
+}
+
+div.vizualisation :nth-child(3) {
+    font-family: "InterRegular";
+    opacity: .6;
+    font-size: 20px;
+}
+
+div.vizualisation :nth-child(4) {
+    font-family: "InterRegular";
+    opacity: .6;
+    font-size: 20px;
+}
+
+div.first_algo_div {
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    width: 90%;
+    height: 800px;
+    margin: auto;
+    padding-top: 30px;
+    border-radius: 30px;
 }
