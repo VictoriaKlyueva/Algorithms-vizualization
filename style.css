@@ -44,13 +44,6 @@ body {
     font-family: "InterMedium";
 }
 
-a {
-    color: #ffffff;
-    font-family: "InterLight";
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.6);
-}
-
 div.site-header__wrapper {
     margin: auto;
     padding-top: 20px;
@@ -63,11 +56,15 @@ div.site-header__wrapper {
     align-items: center;
 }
 
-a.neural_network_text {
-    float: right;
+a {
+    color: #ffffff;
+    font-family: "InterLight";
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-div.vizualisation {
+
+div.main_text {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -79,7 +76,29 @@ div.vizualisation {
     border-radius: 30px;
 }
 
-div.vizualisation :nth-child(1) {
+div.main_text :nth-child(2) {
+    font-family: "InterBold";
+    font-size: 58px;
+}
+
+div.main_text :nth-child(3) {
+    font-family: "InterRegular";
+    opacity: .6;
+    font-size: 20px;
+}
+
+div.main_text :nth-child(4) {
+    font-family: "InterRegular";
+    opacity: .6;
+    font-size: 20px;
+}
+
+div.algorithm_name {
+    margin: auto;
+    width: 90%;
+}
+
+p.italic_text {
     font-family: "InterBolditalic";
     font-size: 80px;
     color: transparent;    
@@ -88,29 +107,21 @@ div.vizualisation :nth-child(1) {
 	background-image: linear-gradient(to right, #F83A3A, #F13DD4, #7000FF);
 }
 
-div.vizualisation :nth-child(2) {
-    font-family: "InterBold";
-    font-size: 58px;
-}
-
-div.vizualisation :nth-child(3) {
-    font-family: "InterRegular";
-    opacity: .6;
-    font-size: 20px;
-}
-
-div.vizualisation :nth-child(4) {
-    font-family: "InterRegular";
-    opacity: .6;
-    font-size: 20px;
-}
-
-div.first_algo_div {
-    border: 2px solid rgba(143, 141, 145, 0.2);
-    background: rgba(255, 255, 255, 0.1);
+div.algo_div {
     width: 90%;
     height: 800px;
     margin: auto;
     padding-top: 30px;
+}
+
+div.block {
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+}
+
+canvas {
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
 }

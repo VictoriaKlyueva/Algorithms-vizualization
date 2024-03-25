@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="Визуализация алгоритмов" content="хз че писать">
+  <meta name="Визуализация алгоритмов" content="На данном сайте представлены визуализации 6(?) алгоритмов.">
 
   <title>Визуализация алгоритмов</title>
 
@@ -20,14 +20,24 @@
     </div>
   </header>
   <main>
-    <div class="vizualisation">
-      <p>Визуализация<br/></p>
+    <div class="main_text">
+      <p class="italic_text">Визуализация<br/></p>
       <p>алгоритмов<br/></p>
       <p><br/>На данном сайте представлены визуализации 6(?) алгоритмов.<br/></p>
       <p>Maded by vikosik3000<br/></p>
     </div>
-    <div class="first_algo_div">
-      <canvas id="NN_canvas" width="200" height="100"></canvas>
+    <div class="algorithm_name">
+      <p class="italic_text">Нейросеть<br/></p>
+    </div>
+    <div class="algo_div">
+      <canvas id="canvas" width="700" height="700"></canvas>
+      <script src="./nn/canvas_script.js"></script>
+      <div class = "block">
+        <img src="/images/nn_architecture.svg" width="300px" height="200px">
+      </div>
+      <div class = "block">
+        <p>Вердикт: </p>
+      </div>
     </div>
   </main>
 </body>

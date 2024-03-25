@@ -143,10 +143,10 @@ async function getfile(filename) {
 
 async function main() {
   // получаем веса
-  const first_layer_para = await getfile("nn/first_layer_para.txt");
-  const first_layer_bias = await getfile("nn/first_layer_bias.txt");
-  const second_layer_para = await getfile("nn/second_layer_para.txt");
-  const second_layer_bias = await getfile("nn/second_layer_bias.txt");
+  const first_layer_para = await getfile("./nn/weights/first_layer_para.txt");
+  const first_layer_bias = await getfile("./nn/weights/first_layer_bias.txt");
+  const second_layer_para = await getfile("./nn/weights/second_layer_para.txt");
+  const second_layer_bias = await getfile("./nn/weights/second_layer_bias.txt");
   
   // задаем параметры модели
   const num_inputs = 28 * 28;
@@ -162,10 +162,7 @@ async function main() {
   model.second_layer.para = second_layer_para;
   model.second_layer.bias = second_layer_bias;
 
-  image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));
-  
-  // console.log(model.first_layer.bias);
-  
+  image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));  
   console.log(make_prediction(model, image));
 
 
@@ -173,16 +170,3 @@ async function main() {
 }
 
 main();
-
-// Usage
-/*
-const num_inputs = 28 * 28;
-const hidden_size = 300;
-const num_outputs = 10;
-
-const model = new NeuralNetwork(num_inputs, hidden_size, num_outputs);
-*/
-
-// image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));
-
-//console.log(make_prediction(model, image));
