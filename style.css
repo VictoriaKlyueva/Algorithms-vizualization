@@ -39,7 +39,8 @@
 }
 
 body {
-    background: url("images/background.jpg") ;
+    background: url("images/background.jpg"), #05020D;
+    background-repeat: no-repeat;
     color: #ffffff;
     font-family: "InterMedium";
 }
@@ -111,12 +112,47 @@ div.algo_div {
     width: 90%;
     height: 800px;
     margin: auto;
+    
     padding-top: 30px;
 }
 
-div.block {
+div.image {
+    width: 47%;
+    height: 500px;
+    top: -88%;
+    right: -53%;
+    position: relative;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+}
+
+div.predict {
+    width: 45%;
+    height: 170px;
+    bottom: 85%;
+    left: 53%;
+    position: relative;
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+
+    font-family: "InterBold";
+    font-size: 45px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 35px;
+    width: 90%;
+    height: 100%;
+    margin: auto;
     border-radius: 30px;
 }
 

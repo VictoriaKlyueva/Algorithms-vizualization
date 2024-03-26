@@ -65,7 +65,6 @@ canvas.addEventListener("mouseup", function(e) {
 
     // сохраняем изображение
     image = getImage(context);
-    console.log(image);
 
     let compressedImage = [];
     for (let i = 0; i < 28; i++) {

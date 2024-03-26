@@ -7,12 +7,12 @@
   <title>Визуализация алгоритмов</title>
 
   <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="wrapper site-header__wrapper">
-        <a href="#" class="neural_network_text">Нейросеть</a>
+        <a href="#algorithm_name_nn" class="neural_network_text">Нейросеть</a>
         <a href="#" class="claster">Кластеризация</a>
         <a href="#" class="claster">еще что то</a>
         <a href="#" class="claster">и еще что то</a>
@@ -27,15 +27,15 @@
       <p>Maded by vikosik3000<br/></p>
     </div>
     <div class="algorithm_name">
-      <p class="italic_text">Нейросеть<br/></p>
+      <p id="algorithm_name_nn" class="italic_text">Нейросеть<br/></p>
     </div>
     <div class="algo_div">
       <canvas id="canvas" width="700" height="700"></canvas>
       <script src="./nn/canvas_script.js"></script>
-      <div class = "block">
+      <div class = "image">
         <img src="/images/nn_architecture.svg" width="300px" height="200px">
       </div>
-      <div class = "block">
+      <div class = "predict">
         <p>Вердикт: </p>
       </div>
     </div>
