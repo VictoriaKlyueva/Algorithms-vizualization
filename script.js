@@ -1,4 +1,4 @@
-import {first_layer, second_layer } from "./nn/weights/weights.js";
+import { first_layer, second_layer } from "./nn/weights/weights.js";
 
 class NeuralNetwork {
   constructor(inputs, hidden, outputs) {
@@ -57,7 +57,6 @@ class NeuralNetwork {
 
   forward(x, y) {
     const z = this.addMatrices(this.matrixMultiply(this.first_layer.para, x).map((i) => [i]), this.first_layer.bias);
-    console.log(typeof z);
     const h = this.activationFunction(z).map((i) => [i]);
     const u = this.addMatrices(this.matrixMultiply(this.second_layer.para, h).map((i) => [i]), this.second_layer.bias);
     const predictList = this.softmax(u).flat();
@@ -97,7 +96,7 @@ class NeuralNetwork {
       const row2 = matrix2[i];
   
       const newRow = [];
-  
+
       for (let j = 0; j < row1.length; j++) {
         newRow.push(row1[j] + row2[j]);
       }
@@ -121,7 +120,7 @@ class NeuralNetwork {
   }
 }
 
-function make_prediction(model, image) {
+export function make_prediction(model, image) {
   return model.forward(image, 0)['f_X'];
 }
 
@@ -137,7 +136,7 @@ const hidden_size = 300;
 const num_outputs = 10;
 
 // создаем модель
-const model = new NeuralNetwork(num_inputs, hidden_size, num_outputs);
+export const model = new NeuralNetwork(num_inputs, hidden_size, num_outputs);
 
 set_weights();
 
