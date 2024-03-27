@@ -7,13 +7,12 @@
   <title>Визуализация алгоритмов</title>
 
   <link rel="stylesheet" href="style.css">
-  <!-- <script type="module" src="script.js"></script> -->
 </head>
 <body>
   <header class="site-header">
     <div class="wrapper site-header__wrapper">
         <a href="#algorithm_name_nn" class="neural_network_text">Нейросеть</a>
-        <a href="#" class="claster">Кластеризация</a>
+        <a href="#algorithm_name_clasterization" class="claster">Кластеризация</a>
         <a href="#" class="claster">еще что то</a>
         <a href="#" class="claster">и еще что то</a>
         <a href="#" class="claster">5-й алгоритм???</a>
@@ -30,14 +29,32 @@
       <p id="algorithm_name_nn" class="italic_text">Нейросеть<br/></p>
     </div>
     <div class="algo_div">
-      <canvas id="canvas" width="700" height="700"></canvas>
-      <script type="module" src="./canvas_script.js"></script>
+      <canvas id="canvas_nn" width="700" height="700"></canvas>
+      <script type="module" src="./nn/nn_script.js"></script>
       <div class = "image">
         <img src="/images/nn_architecture.svg" width="300px" height="200px">
       </div>
-      <div class = "predict">
+      <div class="predict">
         <p>Вердикт: </p>
       </div>
+    </div>
+    <div class="algorithm_name">
+      <p id="algorithm_name_clasterization" class="italic_text">Кластеризация<br/></p>
+    </div>
+    <div class="algo_div">
+    <canvas id="canvas_clasterisation" width="700" height="700"></canvas>
+      <div class = "receiving_data">
+        <p>K: </p>
+        <label for="K_range">0</label>
+        <input type="range" id="K_range" name="K" min="0" max="10" value="5"/>
+        <label for="K_range">10</label>
+        <p>value: <output id="k_value"></output></p>
+        <p></p>
+      </div>
+      <div class="button">
+        <button>Кластеризировать!</button>
+      </div>
+      <script src="./clasterisation/clasterisation.js"></script>
     </div>
   </main>
 </body>
