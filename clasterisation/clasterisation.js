@@ -1,10 +1,14 @@
-function k_means_clasterisation(data, k, num_iters) {
+const canvas = document.getElementById("canvas_clasterisation");
+const context = canvas.getContext("2d");
+var clicks = 0; //number of clicks
+
+function k_means_clasterisation(data, k, num_iters=1000) {
   // Генерируем случайные начальные положения центроидов
   let centroids = [];
   for (let i = 0; i < k; i++) {
     centroids.push({
-      x: Math.random() * 10,
-      y: Math.random() * 10
+      x: Math.random() * 600 + 50,
+      y: Math.random() * 600 + 50
     });
   }
 
@@ -68,6 +72,49 @@ function k_means_clasterisation(data, k, num_iters) {
   return clusters;
 }
 
+function plot_dot(x, y, color='white') {
+  context.beginPath();
+
+  context.fillStyle = color; 
+
+  context.fillRect(x, y, 10, 10);
+  context.closePath();
+}
+
+function coloring(clasters, k) {
+  colors = ["#F83A3A", "#F13DD4", "#7000FF", "#34AEE2", "white"];
+
+  console.log("Clasters: ", clasters);
+  let current_lenght = 0;
+  for (let i = 0; i < k; i++) {
+    for (dot in clasters[i]) {
+      current_lenght += 1;
+    }
+    for (let j = 0; j < current_lenght; j++) {
+      plot_dot(clasters[i][j].x, clasters[i][j].y, colors[i]);
+    }
+    current_lenght = 0;
+  }
+}
+
+const data = [];
+
+// расстоновка точек пользователем
+canvas.addEventListener("click", (e) => {
+  clicks++;
+  const rect = canvas.getBoundingClientRect();
+  // координаты точки
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  plot_dot(x, y);
+
+  data.push({x: x, y: y})
+});
+
+var k = 3; // получить из range
+
+
 // обработчка значения под range
 const value = document.querySelector("#k_value");
 const input = document.querySelector("#K_range");
@@ -76,37 +123,15 @@ input.addEventListener("input", (event) => {
   value.textContent = event.target.value;
 });
 
-const canvas = document.getElementById("canvas_clasterisation");
-const context = canvas.getContext("2d");
-let clicks = 0; //number of clicks
+// Запуск адгоритма по нажатию кнопки
+document.getElementById('claster_button').onclick = buttonProcessing;
+function buttonProcessing() {
+  // const k = 3; // получить из range
 
-canvas.addEventListener("click", (e) => {
-  clicks++;
-  const rect = canvas.getBoundingClientRect();
-  // координаты точки
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  var received_k = Number(document.getElementById('K_range').value);
+  console.log(received_k);
+  console.log(typeof received_k);
 
-  console.log("Нажатие!");
-  context.beginPath();
-
-  context.fillStyle = 'white'; 
-
-  context.fillRect(x, y, 10, 10);
-  context.closePath();
-});
-
-const k = 3;
-const num_iter = 100;
-// Создаем массив тестовых объектов для кластеризации
-const data = [
-  { x: 1, y: 2 },
-  { x: 2, y: 1 },
-  { x: 2, y: 3 },
-  { x: 6, y: 7 },
-  { x: 7, y: 6 },
-  { x: 8, y: 9 },
-  {x: 20, y: 20 },
-];
-
-console.log(k_means_clasterisation(data, k, num_iter));
+  let clasters = k_means_clasterisation(data, received_k);
+  coloring(clasters, k);
+}

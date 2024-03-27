@@ -44,15 +44,15 @@
     <div class="algo_div">
     <canvas id="canvas_clasterisation" width="700" height="700"></canvas>
       <div class = "receiving_data">
-        <p>K: </p>
-        <label for="K_range">0</label>
-        <input type="range" id="K_range" name="K" min="0" max="10" value="5"/>
-        <label for="K_range">10</label>
+        <p>Выберите количесвто классов K: </p>
+        <label for="K_range">2</label>
+        <input type="range" id="K_range" name="K" min="2" max="5" value="2"/>
+        <label for="K_range">5</label>
         <p>value: <output id="k_value"></output></p>
         <p></p>
       </div>
       <div class="button">
-        <button>Кластеризировать!</button>
+        <button id="claster_button" onclick="buttonProcessing()">Кластеризировать!</button>
       </div>
       <script src="./clasterisation/clasterisation.js"></script>
     </div>
