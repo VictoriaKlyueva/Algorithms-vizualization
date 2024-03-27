@@ -76,6 +76,32 @@ button {
     background-color: #5D5A62;
 }
 
+img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 35px;
+    width: 90%;
+    height: 100%;
+    margin: auto;
+    border-radius: 30px;
+}
+
+canvas {
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+}
+
+input[type="range"] {
+    margin-left: 10px;
+    margin-right: 10px;
+    accent-color:  #7000FF;
+    display: table-cell;
+    vertical-align: middle;
+}
+
 button:active {
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
 } 
@@ -142,15 +168,38 @@ div.image {
     border-radius: 30px;
 }
 
-div.receiving_data {
-    width: 47%;
-    height: 500px;
+div.received_data {
+    padding: 35px;
+    width: 42%;
+    height: 435px;
     top: -88%;
     right: -53%;
     position: relative;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
+}
+
+div.received_data.number_of_classes {
+    font-family: "InterBold";
+    font-size: 45px;
+}
+
+div.range_info_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div.range_info_div.label {
+    color: #ffffff;
+    font-family: "InterLight";
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+div.range_div {
+    display: flex;
 }
 
 div.predict {
@@ -178,27 +227,3 @@ div.button {
     position: relative;
     border-radius: 30px;
 }
-
-img {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-left: 35px;
-    width: 90%;
-    height: 100%;
-    margin: auto;
-    border-radius: 30px;
-}
-
-canvas {
-    border: 2px solid rgba(143, 141, 145, 0.2);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-}
-
-input[type="range"] {
-    accent-color:  #7000FF;
-    display: table-cell;
-    vertical-align: middle;
-  }
