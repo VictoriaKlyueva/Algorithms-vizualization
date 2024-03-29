@@ -2,6 +2,77 @@ const canvas = document.getElementById("canvas_clasterisation");
 const context = canvas.getContext("2d");
 var clicks = 0; //number of clicks
 
+class DisjointSet {
+  constructor(size) {
+      this.parent = new Array(size);
+      this.rank = new Array(size);
+      for (let i = 0; i < size; i++) {
+          this.parent[i] = i;
+          this.rank[i] = 0;
+      }
+  }
+
+  find(x) {
+      if (x !== this.parent[x]) {
+          this.parent[x] = this.find(this.parent[x]);
+      }
+      return this.parent[x];
+  }
+
+  union(x, y) {
+      let rootX = this.find(x);
+      let rootY = this.find(y);
+
+      if (rootX === rootY) return;
+
+      if (this.rank[rootX] < this.rank[rootY]) {
+          this.parent[rootX] = rootY;
+      } else if (this.rank[rootX] > this.rank[rootY]) {
+          this.parent[rootY] = rootX;
+      } else {
+          this.parent[rootY] = rootX;
+          this.rank[rootX]++;
+      }
+  }
+}
+
+function clusterizeByConnectedComponents(graph) {
+  const n = graph.length;
+  const dsu = new DisjointSet(n);
+
+  for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+          if (graph[i][j] === 1) {
+              dsu.union(i, j);
+          }
+      }
+  }
+
+  const clusters = {};
+  for (let i = 0; i < n; i++) {
+      const root = dsu.find(i);
+      if (!(root in clusters)) {
+          clusters[root] = [];
+      }
+      clusters[root].push(i);
+  }
+
+  return Object.values(clusters);
+}
+
+// Пример использования
+/*
+const graph = [
+  [1, 1, 0, 0],
+  [1, 1, 0, 0],
+  [0, 0, 1, 1],
+  [0, 0, 1, 1]
+];
+
+const clusters = clusterizeByConnectedComponents(graph);
+console.log(clusters);
+*/
+
 function k_means_clasterisation(data, k, max_num_iters=10000) {
   // Генерируем случайные начальные положения центроидов
   let centroids = [];
