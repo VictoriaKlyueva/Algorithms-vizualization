@@ -2,7 +2,7 @@ const canvas = document.getElementById("canvas_clasterisation");
 const context = canvas.getContext("2d");
 var clicks = 0; //number of clicks
 
-function k_means_clasterisation(data, k, num_iters=1000) {
+function k_means_clasterisation(data, k, max_num_iters=10000) {
   // Генерируем случайные начальные положения центроидов
   let centroids = [];
   for (let i = 0; i < k; i++) {
@@ -38,7 +38,8 @@ function k_means_clasterisation(data, k, num_iters=1000) {
   }
 
   // Проводим итерации
-  for (let i = 0; i < num_iters; i++) {
+  for (let i = 0; i < max_num_iters; i++) {
+    const prevclusters = JSON.stringify(clusters);
     clusters = new Array(k).fill().map(() => []);
     
     data.forEach((point, index) => {
@@ -64,6 +65,10 @@ function k_means_clasterisation(data, k, num_iters=1000) {
         y: sumY / clusterSize
       });
     });
+
+    if (JSON.stringify(clusters) === prevclusters) {
+      break; // выходим из цикла, если кластеры не изменились
+    }
 
     // Обновляем положения центроидов
     centroids = newCentroids;
