@@ -173,7 +173,7 @@ function coloring(clasters, k) {
   }
 }
 
-const data = [];
+var data = [];
 
 // расстоновка точек пользователем
 canvas.addEventListener("click", (e) => {
@@ -188,9 +188,6 @@ canvas.addEventListener("click", (e) => {
   data.push({x: x, y: y})
 });
 
-var k = 3; // получить из range
-
-
 // обработчка значения под range
 const value = document.querySelector("#k_value");
 const input = document.querySelector("#K_range");
@@ -202,12 +199,7 @@ input.addEventListener("input", (event) => {
 // Запуск адгоритма по нажатию кнопки
 document.getElementById('claster_button').onclick = buttonProcessing;
 function buttonProcessing() {
-  // const k = 3; // получить из range
-
-  var received_k = Number(document.getElementById('K_range').value);
-  console.log(received_k);
-  console.log(typeof received_k);
-
-  let clasters = k_means_clasterisation(data, received_k);
+  var k = Number(document.getElementById('K_range').value);
+  let clasters = k_means_clasterisation(data, k);
   coloring(clasters, k);
 }
