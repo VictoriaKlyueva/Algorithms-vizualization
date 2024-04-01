@@ -158,12 +158,12 @@ function plot_dot(x, y, color='white') {
 }
 
 function coloring(clasters, k) {
-  colors = ["#F83A3A", "#F13DD4", "#7000FF", "#34AEE2", "white"];
+  const colors = ["#F83A3A", "#F13DD4", "#7000FF", "#34AEE2", "white"];
 
   console.log("Clasters: ", clasters);
   let current_lenght = 0;
   for (let i = 0; i < k; i++) {
-    for (dot in clasters[i]) {
+    for (let dot in clasters[i]) {
       current_lenght += 1;
     }
     for (let j = 0; j < current_lenght; j++) {
