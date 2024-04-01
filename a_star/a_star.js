@@ -1,3 +1,4 @@
+// Дефолтные значения
 var startPointSet = false;
 var endPointSet = false;
 var startPoint = { x: null, y: null };
@@ -12,6 +13,8 @@ let height = 700;
 canvas.width = width;
 canvas.height = height;
 
+var N = 20 // Мейби заменить потом на ввод с клавы
+
 canvas.addEventListener('click', function(event) {
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
@@ -23,30 +26,33 @@ canvas.addEventListener('click', function(event) {
         startPoint.x = clickedRow;
         startPoint.y = clickedCol;
         startPointSet = true;
-    } else if (!endPointSet) {
+    }
+    else if (!endPointSet) {
         endPoint.x = clickedRow;
         endPoint.y = clickedCol;
         endPointSet = true;
     }
-    drawMaze(window.maze, window.N); // Добавьте 'window.' перед 'maze' и 'N', если они объявлены в другом месте скрипта
+    drawMaze(window.maze, window.N);
 });
 
-document.querySelector('.reset').onclick = function() {
+document.getElementById('reset_button').onclick = function() {
+    console.log("Йоу");
+
     startPointSet = false;
     endPointSet = false;
     startPoint = { x: null, y: null };
     endPoint = { x: null, y: null };
-    drawMaze(window.maze, window.N); // Перерисовываем лабиринт для обновления отображения, добавьте 'window.' если необходимо
+
+    // перерисовка лабиринта
+    drawMaze(window.maze, window.N);
 };
 
-// Остальные функции (initAndCreateMaze, createMaze) остаются без изменений
-function initAndCreateMaze() {
-    var N = parseInt(document.querySelector('.inputN').value);
+function randomProbability() {
+    return 0.5 - Math.random();
+}
+
+function сreateMaze() {
     cellSize = width / N;
-    if (isNaN(N) || N <= 0) {
-        alert("Пожалуйста, введите корректный размер лабиринта (положительное число).");
-        return;
-    }
 
     var maze = [];
     for (let i = 0; i < N; i++) {
@@ -57,74 +63,79 @@ function initAndCreateMaze() {
     }
 
     createMaze(maze, 1, 1, N);
-    drawMaze(maze, N); // Функция для отрисовки лабиринта
+    drawMaze(maze, N);
 }
 
-// Рекурсивная функция для создания лабиринта
-function createMaze(maze, row, col, N) {
-maze[row][col] = false;
+// Создание лабиринта
+function createMaze(maze, row, col) {
+    maze[row][col] = false;
 
-let directions = ['top', 'right', 'bottom', 'left'];
-directions = directions.sort(function() {
-    return 0.5 - Math.random();
-});
+    // Задаем рандомный  порядок направлений
+    let directions = ['top', 'bottom', 'right', 'left'].sort(function() {
+        return randomProbability();
+    });
 
-for (let i = 0; i < directions.length; i++) {
-    switch (directions[i]) {
-        case 'top':
-            if (row - 2 <= 0) continue;
-            if (maze[row - 2][col]) {
-                maze[row - 1][col] = false;
-                createMaze(maze, row - 2, col, N);
-            }
-            break;
-        case 'right':
-            if (col + 2 >= N - 1) continue;
-            if (maze[row][col + 2]) {
-                maze[row][col + 1] = false;
-                createMaze(maze, row, col + 2, N);
-            }
-            break;
-        case 'bottom':
-            if (row + 2 >= N - 1) continue;
-            if (maze[row + 2][col]) {
-                maze[row + 1][col] = false;
-                createMaze(maze, row + 2, col, N);
-            }
-            break;
-        case 'left':
-            if (col - 2 <= 0) continue;
-            if (maze[row][col - 2]) {
-                maze[row][col - 1] = false;
-                createMaze(maze, row, col - 2, N);
-            }
-            break;
-    }
-}
-}
-
-function drawMaze(maze, N) {
-context.clearRect(0, 0, canvas.width, canvas.height);
-for (let i = 0; i < N; i++) {
-    for (let j = 0; j < N; j++) {
-        if (maze[i][j]) {
-            context.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+    for (let i = 0; i < directions.length; i++) {
+        switch (directions[i]) {
+            case 'top':
+                if (row - 2 <= 0)
+                    continue;
+                if (maze[row - 2][col]) {
+                    maze[row - 1][col] = false;
+                    createMaze(maze, row - 2, col, N);
+                }
+                break;
+            case 'right':
+                if (col + 2 >= N - 1)
+                    continue;
+                if (maze[row][col + 2]) {
+                    maze[row][col + 1] = false;
+                    createMaze(maze, row, col + 2, N);
+                }
+                break;
+            case 'bottom':
+                if (row + 2 >= N - 1)
+                    continue;
+                if (maze[row + 2][col]) {
+                    maze[row + 1][col] = false;
+                    createMaze(maze, row + 2, col, N);
+                }
+                break;
+            case 'left':
+                if (col - 2 <= 0)
+                    continue;
+                if (maze[row][col - 2]) {
+                    maze[row][col - 1] = false;
+                    createMaze(maze, row, col - 2, N);
+                }
+                break;
         }
     }
 }
 
-if (startPointSet) {
-    context.fillStyle = 'red';
-    context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
-}
-if (endPointSet) {
-    context.fillStyle = 'red';
-    context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
-}
-context.fillStyle = 'white'; // Возвращаем цвет заливки обратно на черный для следующих отрисовок
+function drawMaze(maze, N) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            if (maze[i][j]) {
+                context.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+            }
+        }
+    }
+
+    if (startPointSet) {
+        context.fillStyle = 'red';
+        context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
+    }
+    if (endPointSet) {
+        context.fillStyle = 'red';
+        context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
+    }
+
+    context.fillStyle = 'white'; // Возвращаем цвет заливки обратно на черный для следующих отрисовок
 }
 
 document.getElementById('A_star_button').onclick = buttonProcessing;
 function buttonProcessing() {
-    initAndCreateMaze();
+    сreateMaze();
 }
