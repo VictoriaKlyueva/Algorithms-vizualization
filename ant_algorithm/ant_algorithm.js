@@ -4,23 +4,18 @@ var clicks = 0; //number of clicks
 
 var data = [];
 
-function ant_algorithm() {
+function ant_algorithm(data) {
   console.log("Started!");
 
   // Создаем граф, представляющий города и расстояния между ними
-  const graph = [
-    [0, 2, 9, 10],
-    [1, 0, 6, 4],
-    [15, 7, 0, 8],
-    [6, 3, 12, 0]
-  ];
+  const graph = get_graph(data);
   const numOfCities = graph.length;
 
   // Гиперпараметры
   const numOfAnts = 10;
   const numOfIterations = 100;
   const alpha = 1;
-  const beta = 5;
+  const beta = 4;
   const rho = 0.5
 
   let bestTrail;
@@ -115,9 +110,30 @@ function ant_algorithm() {
     pheromones[bestTrail[0]][bestTrail[numOfCities - 1]] += (1 / bestDistance);
   }
 
-  // Вывод
-  console.log('Best trail:', bestTrail);
-  console.log('Best distance:', bestDistance);
+  // Отрисовка рёбер
+  plot_lines(data, bestTrail);
+}
+
+function plot_lines(data, trail, color='white') {
+  context.strokeStyle = color;
+  context.lineWidth = "7";
+  context.lineCap = "round";
+
+  // Передвигаемся в начальную вершину
+  context.moveTo(data[trail[0]].x, data[trail[0]].y);
+
+
+  // Рисуем рёбра
+  for (let i = 1; i < clicks; i++) {
+    context.lineTo(data[trail[i]].x, data[trail[i]].y);
+    context.stroke();
+  }
+
+  // Возвращаемся к начальной вершине
+  context.lineTo(data[trail[0]].x, data[trail[0]].y);
+  context.stroke();
+
+  context.closePath();
 }
 
 function plot_dot(x, y, radius, color='white') {
@@ -138,6 +154,31 @@ function plot_dot(x, y, radius, color='white') {
 function calculate_distance(x1, y1, x2, y2) {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
+
+function get_graph(data) {
+  let graph = [];
+  let row = clicks;
+  let col = clicks;
+  let h = 0
+  
+  // Инициализируем граф нулями
+  for (let i = 0; i < row; i++) {
+    graph[i] = [];
+    for (let j = 0; j < col; j++) {
+      graph[i][j] = 0;
+    }
+  }
+
+  // заполняем граф
+  for (let i = 0; i < row; i++) {
+    for (let j = i; j < col; j++) {
+        graph[i][j] = calculate_distance(data[i].x, data[i].y, data[j].x, data[j].y);
+        graph[j][i] = calculate_distance(data[i].x, data[i].y, data[j].x, data[j].y);
+    }
+  }
+
+  return graph;
+}
   
 data = []
 // расстоновка точек пользователем
@@ -150,10 +191,12 @@ canvas.addEventListener("click", (e) => {
   const radius = 10;
 
   plot_dot(x, y, radius);
+
+  data.push({x: x, y: y})
 });
 
 // Запуск адгоритма по нажатию кнопки
 document.getElementById('ant_algorithm_button').onclick = buttonProcessing;
 function buttonProcessing() {
-    ant_algorithm();
+  ant_algorithm(data);
 }
