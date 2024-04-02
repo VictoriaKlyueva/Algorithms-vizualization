@@ -11,19 +11,19 @@
 <body>
   <header class="site-header">
     <div class="wrapper site-header__wrapper">
-        <a href="#algorithm_name_nn" class="neural_network_text">Нейросеть</a>
-        <a href="#algorithm_name_clasterization" class="claster">Кластеризация</a>
-        <a href="#algorithm_name_A_star" class="claster">A star</a>
-        <a href="#algorithm_name_ant_algorithm" class="claster">Муравьиный алгоритм</a>
-        <a href="#" class="claster">5-й алгоритм</a>
-        <a href="#" class="claster">6-й алгоритм</a>
+        <a href="#algorithm_name_nn">Нейросеть</a>
+        <a href="#algorithm_name_clasterization">Кластеризация</a>
+        <a href="#algorithm_name_A_star">A star</a>
+        <a href="#algorithm_name_ant_algorithm">Муравьиный алгоритм</a>
+        <a href="#algorithm_name_genetic_algorithm">Генетический алгоритм</a>
+        <a href="#" class="claster">Дерево решений</a>
     </div>
   </header>
   <main>
     <div class="main_text">
       <p class="italic_text">Визуализация<br/></p>
       <p>алгоритмов<br/></p>
-      <p><br/>На данном сайте представлены визуализации 6 (я очень на это надеюсь) алгоритмов.<br/></p>
+      <p><br/>На данном сайте представлены визуализации 6 (почти) алгоритмов.<br/></p>
       <p>Maded by vikosik3000<br/></p>
     </div>
     <div class="algorithm_name">
@@ -82,6 +82,16 @@
         <button id="ant_algorithm_button" onclick="buttonProcessing()">Найти путь</button>
       </div>
       <script type="module" src="./ant_algorithm/ant_algorithm.js"></script>
+    </div>
+    <div class="algorithm_name">
+      <p id="algorithm_name_genetic_algorithm" class="italic_text">Генетический алгоритм<br/></p>
+    </div>
+    <div class="algo_div">
+      <canvas id="canvas_genetic_algorithm" width="700" height="700"></canvas>
+      <div class="button">
+        <button id="genetic_algorithm_button" onclick="buttonProcessing()">Найти путь</button>
+      </div>
+      <script type="module" src="./genetic_algorithm/genetic_algorithm.js"></script>
     </div>
   </main>
 </body>

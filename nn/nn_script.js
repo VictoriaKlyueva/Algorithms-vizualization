@@ -1,5 +1,11 @@
 import { first_layer, second_layer } from "./weights/weights.js";
 
+const canvas = document.getElementById("canvas_nn");
+const context = canvas.getContext("2d");
+
+const w = canvas.width;
+const h = canvas.height;
+
 class NeuralNetwork {
     constructor(inputs, hidden, outputs) {
       this.first_layer = {};
@@ -106,50 +112,49 @@ class NeuralNetwork {
       return result;
     }
     
-    matrixMultiply(a, b) {
-      let result = Array(a.length)
-      for (let i = 0; i < a.length; i++) {
+    matrixMultiply(firstMatrix, secondMatrix) {
+      let result = Array(firstMatrix.length)
+      for (let i = 0; i < firstMatrix.length; i++) {
         let sum = 0;
-        for (let j = 0; j < a[0].length; j++) {
-          sum += a[i][j] * b[j]
+        for (let j = 0; j < firstMatrix[0].length; j++) {
+          sum += firstMatrix[i][j] * secondMatrix[j]
         }
         result[i] = sum;
       }
-      // console.log('mult ' + result);
       return result;
     }
 }
   
-function make_prediction(model, image) {
+function makePrediction(model, image) {
   const probs = model.forward(image, 0)['f_X'][0];
 
   console.log("Probs:", probs);
 
-  let max_index = 0;
-  let max_value = probs[0];
+  let maxIndex = 0;
+  let maxValue = probs[0];
 
   for (let i = 0; i < 10; i++) {
-    if (probs[i] > max_value) {
-      max_value = probs[i];
-      max_index = i;
+    if (probs[i] > maxValue) {
+      maxValue = probs[i];
+      maxIndex = i;
     }
   }
 
-  return max_index;
+  return maxIndex;
 }
   
-function set_weights() {
-  // задаем считанные веса
+function loadWeights() {
+  // Задаем считанные веса
   model.first_layer = first_layer;
   model.second_layer = second_layer;
 }
 
-// получение изображения с canvas
+// Получение изображения с canvas
 function getImage(context) {
   const imageData = context.getImageData(0, 0, w, h);
   const pixels = imageData.data;
 
-  const bw_image = [];
+  const monochromeImage = [];
 
   for (let i = 0; i < pixels.length; i += 4) {
       // Получаем значения RGB компонент пикселя
@@ -161,37 +166,31 @@ function getImage(context) {
       const brightness = Math.round((red + green + blue) / 3);
     
       // Создаем новый пиксель в черно-белом цвете и добавляем его в массив
-      bw_image.push(brightness);
+      monochromeImage.push(brightness);
     }
 
-  return bw_image;
+  return monochromeImage;
 }
 
-// задаем параметры модели
-const num_inputs = 28 * 28;
-const hidden_size = 300;
-const num_outputs = 10;
+// Задаем параметры модели
+const NUM_INPUTS = 28 * 28;
+const HIDDEN_SIZE = 300;
+const NUM_OUTPUTS = 10;
 
-// создаем модель
-const model = new NeuralNetwork(num_inputs, hidden_size, num_outputs);
+// Создаем модель
+const model = new NeuralNetwork(NUM_INPUTS, HIDDEN_SIZE, NUM_OUTPUTS);
+// Загружаем веса
+loadWeights();
 
-set_weights();
-
-
-const canvas = document.getElementById("canvas_nn");
-const context = canvas.getContext("2d");
-
-const w = canvas.width;
-const h = canvas.height;
-
-// координаты мыши
+// Координаты мыши
 const mouse = { x: 0, y: 0};
 let draw = false;
                 
-// нажатие мыши
+// Нажатие мыши
 canvas.addEventListener("mousedown", function(e) {
     mouse.x = e.pageX - this.offsetLeft;
     mouse.y = e.pageY - this.offsetTop;
+
     draw = true;
     context.beginPath();
 
@@ -207,23 +206,26 @@ canvas.addEventListener("mousemove", function(e) {
     if(draw==true){
         mouse.x = e.pageX - this.offsetLeft;
         mouse.y = e.pageY - this.offsetTop;
+
         context.lineTo(mouse.x, mouse.y);
         context.stroke();
     }
 });
 
-// отпускаем мышь
+// Мышь опущена
 canvas.addEventListener("mouseup", function(e) {
   mouse.x = e.pageX - this.offsetLeft;
   mouse.y = e.pageY - this.offsetTop;
+
   context.lineTo(mouse.x, mouse.y);
   context.stroke();
   context.closePath();
   draw = false;
 
-  // сохраняем изображение
+  // Cохраняем изображение
   const image = getImage(context);
 
+  // Сжатие изображения до 28 x 28
   let compressedImage = [];
   for (let i = 0; i < 28; i++) {
     for (let j = 0; j < 28; j++) {
@@ -242,9 +244,9 @@ canvas.addEventListener("mouseup", function(e) {
     }
   }
   
-  const predict = make_prediction(model, compressedImage);
-  console.log("Pred:", predict);
-  document.getElementsByClassName("predict")[0].innerHTML = "Вердикт: " +  predict;
+  const prediction = makePrediction(model, compressedImage);
+  console.log("Pred:", prediction);
+  document.getElementsByClassName("predict")[0].innerHTML = "Вердикт: " +  prediction;
 
   // const test_image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));  
   // console.log("Test:", make_prediction(model, test_image));

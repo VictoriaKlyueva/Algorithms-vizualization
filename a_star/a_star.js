@@ -1,58 +1,63 @@
-// Дефолтные значения
-var startPointSet = false;
-var endPointSet = false;
-var startPoint = { x: null, y: null };
-var endPoint = { x: null, y: null };
-
 const canvas = document.getElementById('canvas_A_star');
 const context = canvas.getContext('2d');
-var cellSize;
 
-let width = 700;
-let height = 700;
-canvas.width = width;
-canvas.height = height;
+// Дефолтные значения
+var isStart;
+var isEnd;
+var startPoint;
+var endPoint;
 
-var N = 20 // Мейби заменить потом на ввод с клавы
+setDefoltValues();
 
-canvas.addEventListener('click', function(event) {
-    var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    var clickedRow = Math.floor(y / cellSize);
-    var clickedCol = Math.floor(x / cellSize);
+canvas.width = 700;
+canvas.height = 700;
 
-    if (!startPointSet) {
-        startPoint.x = clickedRow;
-        startPoint.y = clickedCol;
-        startPointSet = true;
-    }
-    else if (!endPointSet) {
-        endPoint.x = clickedRow;
-        endPoint.y = clickedCol;
-        endPointSet = true;
-    }
-    drawMaze(window.maze, window.N);
-});
-
-document.getElementById('reset_button').onclick = function() {
-    console.log("Йоу");
-
-    startPointSet = false;
-    endPointSet = false;
-    startPoint = { x: null, y: null };
-    endPoint = { x: null, y: null };
-
-    // перерисовка лабиринта
-    drawMaze(window.maze, window.N);
-};
+var N = 20 // Заменить потом на ввод с клавы
 
 function randomProbability() {
     return 0.5 - Math.random();
 }
 
-function сreateMaze() {
-    cellSize = width / N;
+// Установка дефолтных значений для canvas
+function setDefoltValues() {
+    isStart = false;
+    isEnd = false;
+    startPoint = { x: null, y: null };
+    endPoint = { x: null, y: null };
+}
+
+canvas.addEventListener('click', function(event) {
+    var rectangle = canvas.getBoundingClientRect();
+
+    var x = event.clientX - rectangle.left;
+    var y = event.clientY - rectangle.top;
+
+    if (!isStart) {
+        startPoint.x = Math.floor(y / cellSize);
+        startPoint.y = Math.floor(x / cellSize);
+        isStart = true;
+    }
+
+    else if (!isEnd) {
+        endPoint.x = Math.floor(y / cellSize);
+        endPoint.y = Math.floor(x / cellSize);
+        isEnd = true;
+    }
+    
+    drawMaze(maze, N);
+});
+
+document.getElementById('reset_button').onclick = function() {
+    setDefoltValues();
+
+    // Очистка canvas
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+};
+
+var cellSize;
+function createMaze() {
+    cellSize = canvas.width / N;
 
     var maze = [];
     for (let i = 0; i < N; i++) {
@@ -62,18 +67,17 @@ function сreateMaze() {
         }
     }
 
-    createMaze(maze, 1, 1, N);
-    drawMaze(maze, N);
+    getMaze(maze, 1, 1);
+    drawMaze(maze);
+    console.log(maze);
 }
 
 // Создание лабиринта
-function createMaze(maze, row, col) {
+function getMaze(maze, row, col) {
     maze[row][col] = false;
 
     // Задаем рандомный  порядок направлений
-    let directions = ['top', 'bottom', 'right', 'left'].sort(function() {
-        return randomProbability();
-    });
+    let directions = ['top', 'bottom', 'right', 'left'].sort(function() { return randomProbability(); });
 
     for (let i = 0; i < directions.length; i++) {
         switch (directions[i]) {
@@ -82,38 +86,41 @@ function createMaze(maze, row, col) {
                     continue;
                 if (maze[row - 2][col]) {
                     maze[row - 1][col] = false;
-                    createMaze(maze, row - 2, col, N);
+                    getMaze(maze, row - 2, col, N);
                 }
                 break;
-            case 'right':
-                if (col + 2 >= N - 1)
-                    continue;
-                if (maze[row][col + 2]) {
-                    maze[row][col + 1] = false;
-                    createMaze(maze, row, col + 2, N);
-                }
-                break;
+
             case 'bottom':
                 if (row + 2 >= N - 1)
                     continue;
                 if (maze[row + 2][col]) {
                     maze[row + 1][col] = false;
-                    createMaze(maze, row + 2, col, N);
+                    getMaze(maze, row + 2, col, N);
                 }
                 break;
+
+            case 'right':
+                if (col + 2 >= N - 1)
+                    continue;
+                if (maze[row][col + 2]) {
+                    maze[row][col + 1] = false;
+                    getMaze(maze, row, col + 2, N);
+                }
+                break;
+
             case 'left':
                 if (col - 2 <= 0)
                     continue;
                 if (maze[row][col - 2]) {
                     maze[row][col - 1] = false;
-                    createMaze(maze, row, col - 2, N);
+                    getMaze(maze, row, col - 2, N);
                 }
                 break;
         }
     }
 }
 
-function drawMaze(maze, N) {
+function drawMaze(maze, colorEnds='#F83A3A') {
     context.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
@@ -123,19 +130,17 @@ function drawMaze(maze, N) {
         }
     }
 
-    if (startPointSet) {
-        context.fillStyle = 'red';
+    if (isStart) {
+        context.fillStyle = colorEnds;
         context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
     }
-    if (endPointSet) {
-        context.fillStyle = 'red';
+    if (isEnd) {
+        context.fillStyle = colorEnds;
         context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
     }
-
-    context.fillStyle = 'white'; // Возвращаем цвет заливки обратно на черный для следующих отрисовок
 }
 
 document.getElementById('A_star_button').onclick = buttonProcessing;
 function buttonProcessing() {
-    сreateMaze();
+    createMaze();
 }
