@@ -14,8 +14,8 @@ function geneticAlgorithm(data) {
   // гиперпараметры
   const NUM_CITIES = adjacencyMatrix.length;
   const NUM_POPULATION = 100;
-  const NUM_GENERATIONS = 1000;
-  const MUTATION_RATE = 0.2;
+  const NUM_GENERATIONS = 100000;
+  const MUTATION_RATE = 0.3;
 
   // Генерация начальной популяции
   function generateInitialPopulation() {

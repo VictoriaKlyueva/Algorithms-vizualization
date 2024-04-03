@@ -12,7 +12,7 @@ setDefoltValues();
 canvas.width = 700;
 canvas.height = 700;
 
-var N = 20 // Заменить потом на ввод с клавы
+var N = 21 // Заменить потом на ввод с клавы
 
 function randomProbability() {
     return 0.5 - Math.random();
