@@ -4,6 +4,101 @@ const context = canvas.getContext("2d");
 // Количесвто нажатий на canvas
 var clicks = 0;
 
+// функция для расчета расстояния между двумя точками
+function calculateDistance(x1, y1, x2, y2) {
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+}
+
+function getGraph(data) {
+  let graph = [];
+  
+  // Инициализируем граф нулями
+  for (let i = 0; i < clicks; i++) {
+    graph[i] = [];
+    for (let j = 0; j < clicks; j++) {
+      graph[i][j] = 0;
+    }
+  }
+
+  // заполняем граф
+  for (let i = 0; i < clicks; i++) {
+    for (let j = i; j < clicks; j++) {
+        graph[i][j] = calculateDistance(data[i].x, data[i].y, data[j].x, data[j].y);
+        graph[j][i] = calculateDistance(data[i].x, data[i].y, data[j].x, data[j].y);
+    }
+  }
+
+  return graph;
+}
+
+function findConnectedComponents(data, distance=100) {
+  const adjacencyList = {};
+  const visited = new Set();
+  const components = [];
+
+  for (let i = 0; i < data.length; i++) {
+    adjacencyList[i] = [];
+  }
+
+  // Build adjacency list
+  for (let i = 0; i < data.length - 1; i++) {
+    const x1 = data[i].x;
+    const y1 = data[i].y;
+    adjacencyList[i] = [];
+    
+    for (let j = i + 1; j < data.length; j++) {
+      const x2 = data[j].x;
+      const y2 = data[j].y;
+      
+      const currentDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      
+      if (currentDistance < distance) {
+        adjacencyList[i].push(j);
+        adjacencyList[j].push(i);
+      }
+    }
+  }
+
+  // Depth-first search function
+  function dfs(node, component) {
+    visited.add(node);
+    component.push(node);
+    
+    for (const neighbor of adjacencyList[node]) {
+      if (!visited.has(neighbor)) {
+        dfs(neighbor, component);
+      }
+    }
+  }
+
+  // Find connected components
+  for (let i = 0; i < data.length; i++) {
+    if (!visited.has(i)) {
+      const component = [];
+      dfs(i, component);
+      components.push(component);
+    }
+  }
+
+  function toDots(components) {
+    let clasters = [];
+    for (let i = 0; i < components.length; i++) {
+      clasters[i] = [];
+    }
+
+    for (let i = 0; i < components.length; i++) {
+      for (let j = 0; j < components[i].length; j++) {
+        clasters[i].push(data[components[i][j]]);
+      }
+    }
+
+    return clasters;
+  }
+
+  return toDots(components);
+}
+
+
 function DBSCAN(points, eps=100, minPts=1) {
   let clusters = [];
   let noise = [];
@@ -55,7 +150,6 @@ function DBSCAN(points, eps=100, minPts=1) {
 
   return clusters;
 }
-
 
 function KMeansClasterisation(data, k, maxNumIters=100000) {
   // Генерируем случайные начальные положения центроидов
@@ -133,17 +227,23 @@ function KMeansClasterisation(data, k, maxNumIters=100000) {
   return clusters;
 }
 
-function plotDot(x, y, color='white', epsilon=0) {
+function plotDot(x, y, color='white', epsilon=0, isInput=false) {
   context.beginPath();
 
   context.fillStyle = color; 
 
-  context.fillRect(x + epsilon, y + epsilon, 15, 15);
+  if (isInput) {
+    context.fillRect(x, y + epsilon, 30, 30);
+  }
+  else {
+    context.fillRect(x, y + epsilon, 30, 10);
+  }
+
   context.closePath();
 }
 
 function coloring(clasters, k, epsilon=0) {
-  const colors = ["#F83A3A", "#F13DD4", "#7000FF", "#34AEE2", "white"];
+  const colors = ["#F73A4B", "#7000FF", "#3AC7F7", "#FFA7A7", "#59D499"];
 
   console.log("Clasters: ", clasters);
   let currentLenght = 0;
@@ -168,7 +268,7 @@ canvas.addEventListener("click", (e) => {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
-  plotDot(x, y);
+  plotDot(x, y, 'white', 0, true);
 
   data.push({x: x, y: y})
 });
@@ -188,20 +288,32 @@ epsilonInput.addEventListener("input", (event) => {
   epsilonValue.textContent = event.target.value;
 });
 
+const distanceValue = document.querySelector("#distance_value");
+const distanceInput = document.querySelector("#distance_range");
+distanceValue.textContent = distanceInput.value;
+distanceInput.addEventListener("input", (event) => {
+  distanceValue.textContent = event.target.value;
+});
+
 // Запуск адгоритма по нажатию кнопки
 document.getElementById('claster_button').onclick = buttonProcessing;
 
 function buttonProcessing() {
-  console.log("data: ", data);
+  // Очистка canvas
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
   var numClasters = Number(document.getElementById('K_range').value);
   var epsilonValue = Number(document.getElementById('epsilon_range').value);
 
   let KmeanClasters = KMeansClasterisation(data, numClasters);
   let DBSCANClasters = DBSCAN(data, epsilonValue);
+  let connectedComponentsClasters = findConnectedComponents(data);
 
-  coloring(KmeanClasters, numClasters);
-  coloring(DBSCANClasters, DBSCANClasters.length, 5);
+  coloring(KmeanClasters, numClasters, 0);
+  coloring(DBSCANClasters, DBSCANClasters.length, 10);
+  coloring(connectedComponentsClasters, connectedComponentsClasters.length, 20);
 
-  console.log("DBSCAN ", DBSCANClasters);
+  for (let i = 0; i < clicks; i++) {
+    data[i].visited = false;
+  }
 }
