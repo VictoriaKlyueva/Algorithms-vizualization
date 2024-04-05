@@ -190,3 +190,12 @@ document.getElementById('ant_algorithm_button').onclick = buttonProcessing;
 function buttonProcessing() {
   antAlgorithm(data);
 }
+
+// Очистка канваса по нажатию кнопки
+document.getElementById('ant_algorithm_reset').onclick = resetProcessing;
+function resetProcessing() {
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  data.length = 0
+  clicks = 0;
+}
