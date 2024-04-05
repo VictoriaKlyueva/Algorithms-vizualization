@@ -107,11 +107,12 @@ canvas {
 }
 
 input[type="range"] {
+    width: 100%;
     margin-left: 10px;
     margin-right: 10px;
-    accent-color:  #7000FF;
     display: table-cell;
     vertical-align: middle;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 div.main_text {
@@ -245,6 +246,18 @@ div.range_info_div.label {
 
 div.range_div {
     display: flex;
+}
+
+input#K_range {
+    accent-color: #F63A62;
+}
+
+input#epsilon_range {
+    accent-color:  #E437D8;
+}
+
+input#distance_range {
+    accent-color: #7201FE;
 }
 
 p.number_of_classes {

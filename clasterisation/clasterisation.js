@@ -227,16 +227,28 @@ function KMeansClasterisation(data, k, maxNumIters=100000) {
   return clusters;
 }
 
+function roundedRectPath(x, y, w, h, r) {
+  r = (Math.min(w, h) /2  > r) ? r : Math.min(w, h) / 2;
+
+  return `M ${x + r} ${y} l ${w-2*r} 0 q ${r} 0 ${r} ${r}
+      l 0 ${h - 2 * r} q 0 ${r} ${-r} ${r}
+      l ${- w + 2 * r} 0 q ${-r} 0 ${-r} ${-r}
+      l 0 ${- h + 2 * r} q 0 ${-r} ${r} ${-r}`;
+}
+
 function plotDot(x, y, color='white', epsilon=0, isInput=false) {
   context.beginPath();
 
   context.fillStyle = color; 
+  context.strokeStyle = color;
 
   if (isInput) {
-    context.fillRect(x, y + epsilon, 30, 30);
+    context.stroke(new Path2D(roundedRectPath(x, y + epsilon, 30, 30, 10)));
+    context.fill(new Path2D(roundedRectPath(x, y + epsilon, 30, 30, 10)));
   }
   else {
-    context.fillRect(x, y + epsilon, 30, 10);
+    context.stroke(new Path2D(roundedRectPath(x, y + epsilon, 30, 10, 10)));
+    context.fill(new Path2D(roundedRectPath(x, y + epsilon, 30, 10, 10)));
   }
 
   context.closePath();
