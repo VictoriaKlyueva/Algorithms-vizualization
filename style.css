@@ -144,7 +144,7 @@ div.main_text :nth-child(4) {
 }
 
 div.algorithm_name {
-    padding-top: 10%;
+    padding-top:10%;
     height: 200%;
     display: flex;
     margin: auto;
@@ -165,7 +165,7 @@ div.algo_div {
     margin: 30px;
 
     width: 90%;
-    height: 800px;
+    height: 700px;
     margin: auto;
     
     padding-top: 30px;
@@ -180,7 +180,7 @@ div.info {
 
 div.image {
     float: left;
-    height: 200%;
+    height: 85%;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
@@ -202,7 +202,7 @@ div.predict {
 }
 
 div.received_data {
-    height: 65%;
+    height: 60%;
     display: flex;
     padding: 10%;
     border: 2px solid rgba(143, 141, 145, 0.2);
@@ -233,7 +233,7 @@ div.range_info_div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10%;
+    margin: 5%;
 }
 
 div.range_info_div.label {
