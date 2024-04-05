@@ -65,7 +65,7 @@ a {
 }
 
 button {
-    box-sizing: border-box;
+    float: left;
     width: 100%; 
     height: 100%;
     font-family: "InterRegular";
@@ -114,10 +114,6 @@ input[type="range"] {
     vertical-align: middle;
 }
 
-button:active {
-    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
-} 
-
 div.main_text {
     display: flex;
     flex-direction: column;
@@ -148,6 +144,9 @@ div.main_text :nth-child(4) {
 }
 
 div.algorithm_name {
+    padding-top: 10%;
+    height: 200%;
+    display: flex;
     margin: auto;
     width: 90%;
 }
@@ -162,6 +161,9 @@ p.italic_text {
 }
 
 div.algo_div {
+    display: flex;
+    margin: 30px;
+
     width: 90%;
     height: 800px;
     margin: auto;
@@ -169,27 +171,52 @@ div.algo_div {
     padding-top: 30px;
 }
 
+div.info {
+    width: 100%;
+    display: flex;
+    margin-left: 30px;
+    flex-direction: column;
+}
+
 div.image {
-    width: 47%;
-    height: 500px;
-    top: -88%;
-    right: -53%;
-    position: relative;
+    float: left;
+    height: 200%;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
 }
 
-div.received_data {
-    padding: 35px;
-    width: 42%;
-    height: 435px;
-    top: -88%;
-    right: -53%;
-    position: relative;
+div.predict {
+    float: left;
+    height: 80%;
+    margin-top: 30px;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
+
+    font-family: "InterBold";
+    font-size: 45px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+div.received_data {
+    height: 65%;
+    display: flex;
+    padding: 10%;
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+div.data_choising {
+    height: 200%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 div.received_data.number_of_classes {
@@ -198,9 +225,15 @@ div.received_data.number_of_classes {
 }
 
 div.range_info_div {
+    color: #ffffff;
+    font-family: "InterLight";
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 10%;
 }
 
 div.range_info_div.label {
@@ -214,28 +247,18 @@ div.range_div {
     display: flex;
 }
 
-div.predict {
-    width: 45%;
-    height: 170px;
-    bottom: 85%;
-    left: 53%;
-    position: relative;
-    border: 2px solid rgba(143, 141, 145, 0.2);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-
-    font-family: "InterBold";
-    font-size: 45px;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
+p.number_of_classes {
+    font-size: 25px;
 }
 
 div.button {
-    width: 47%;
-    height: 170px;
-    bottom: 85%;
-    left: 53%;
-    position: relative;
+    margin-bottom: 30px;
+    float: left;
+    height: 20%;
     border-radius: 30px;
+}
+
+#claster_button {
+    margin-bottom: 0px;
+    margin-top: 30px;
 }
