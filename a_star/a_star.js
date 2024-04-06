@@ -120,12 +120,16 @@ function getMaze(maze, row, col) {
     }
 }
 
-function drawMaze(maze, colorEnds='#F83A3A') {
+function drawMaze(maze, colorEnds='#F83A3A', color='white') {
+    context.fillStyle = color; 
+    context.strokeStyle = color;
+
     context.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
             if (maze[i][j]) {
                 context.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                context.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
     }

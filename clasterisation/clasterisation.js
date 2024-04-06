@@ -151,59 +151,59 @@ function DBSCAN(points, eps=100, minPts=1) {
   return clusters;
 }
 
-function KMeansClasterisation(data, k, maxNumIters=100000) {
-  // Эвристика для генерации центроид 
+function KMeans(data, k, maxNumIters=10000) {
   /*
-    каждый следующий центр выбираем из случайного распределения 
+    Эвристика для генерации центроид
+    Каждый следующий центр выбираем из случайного распределения 
     на объектах выборки, в котором вероятность выбрать объект пропорциональна 
     квадрату расстояния от него до ближайшего к нему центра кластера.
   */
   function generateCentroids(k, data) {
     function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function calculateDistance(point1, point2) {
-        return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+      return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
     }
 
     function getClosestCentroidIndex(point, centroids) {
-        let minDistance = Infinity;
-        let closestCentroidIndex = null;
+      let minDistance = Infinity;
+      let closestCentroidIndex = null;
+      
+      centroids.forEach((centroid, index) => {
+        const distance = calculateDistance(point, centroid);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestCentroidIndex = index;
+        }
+      });
         
-        centroids.forEach((centroid, index) => {
-            const distance = calculateDistance(point, centroid);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestCentroidIndex = index;
-            }
-        });
-        
-        return closestCentroidIndex;
+      return closestCentroidIndex;
     }
 
     // Generate the first centroid randomly
     const centroids = [{
-        x: getRandomInt(0, 700),
-        y: getRandomInt(0, 700)
+      x: getRandomInt(30, 670),
+      y: getRandomInt(30, 670)
     }];
 
     // Generate the rest of the centroids
     for (let i = 1; i < k; i++) {
-        let distances = data.map((point) => Math.pow(calculateDistance(point, centroids[getClosestCentroidIndex(point, centroids)]), 2));
-        
-        let sumDistances = distances.reduce((acc, val) => acc + val, 0);
-        let probabilities = distances.map((distance) => distance / sumDistances);
-        
-        let randomValue = Math.random() * sumDistances;
-        let index = 0;
-        
-        while (randomValue > 0) {
-            randomValue -= distances[index];
-            index++;
-        }
-        
-        centroids.push(data[index - 1]);
+      let distances = data.map((point) => Math.pow(calculateDistance(point, centroids[getClosestCentroidIndex(point, centroids)]), 2));
+      
+      let sumDistances = distances.reduce((acc, val) => acc + val, 0);
+      let probabilities = distances.map((distance) => distance / sumDistances);
+      
+      let randomValue = Math.random() * sumDistances;
+      let index = 0;
+      
+      while (randomValue > 0) {
+          randomValue -= distances[index];
+          index++;
+      }
+      
+      centroids.push(data[index - 1]);
     }
 
     return centroids;
@@ -265,11 +265,6 @@ function KMeansClasterisation(data, k, maxNumIters=100000) {
         y: sumY / clusterSize
       });
     });
-
-    // Выходим из цикла, если кластеры не изменились
-    if (JSON.stringify(clusters) === prevClusters) {
-      break;
-    }
 
     // Обновляем положения центроидов
     centroids = newCentroids;
@@ -368,7 +363,7 @@ function buttonProcessing() {
   var numClasters = Number(document.getElementById('K_range').value);
   var epsilonValue = Number(document.getElementById('epsilon_range').value);
 
-  let KmeanClasters = KMeansClasterisation(data, numClasters);
+  let KmeanClasters = KMeans(data, numClasters);
   let DBSCANClasters = DBSCAN(data, epsilonValue);
   let connectedComponentsClasters = findConnectedComponents(data);
 

@@ -178,7 +178,7 @@ canvas.addEventListener("click", (e) => {
   // координаты точки
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
-  const radius = 10;
+  const radius = 20;
 
   plotDot(x, y, radius);
 
