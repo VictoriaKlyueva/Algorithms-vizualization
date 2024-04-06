@@ -79,13 +79,13 @@ button {
 button:hover {
     background: rgba(93, 90, 98, 0.5);
     border-radius: 15px;
-    border: 5px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 button:active {
     background: rgba(93, 90, 98, 0.75);
     border-radius: 15px;
-    border: 5px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 img {
@@ -121,7 +121,7 @@ div.main_text {
     justify-content: center;
     align-items: center;
     width: 90%;
-    height: 800px;
+    height: 700px;
     margin: auto;
     padding-top: 30px;
     border-radius: 30px;
@@ -181,7 +181,7 @@ div.info {
 
 div.image {
     float: left;
-    height: 85%;
+    height: 75%;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
@@ -265,7 +265,7 @@ p.number_of_classes {
 }
 
 div.button {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     float: left;
     height: 20%;
     border-radius: 30px;
