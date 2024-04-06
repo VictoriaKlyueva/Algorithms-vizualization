@@ -1,4 +1,5 @@
 // https://github.com/abbas-taher/decision-tree-algorithm-example
+// https://github.com/pbharrin/machinelearninginaction3x
 
 function calculateEntropy(dataset) {
     // Подсчет количесвта уникальных лейблов данных
@@ -131,37 +132,37 @@ function predict(inputTree, features, testVec) {
     return classify(inputTree, testDict);
 }
   
-function pprintTree(tree) {
+function printTree(tree) {
     console.log(JSON.stringify(tree, null, 4));
 }
   
   function createDataset() {
     // Пока как пример
     let dataset = [
-      [1, 1, "yes"],
-      [1, 1, "yes"],
-      [1, 0, "no"],
-      [0, 1, "no"],
-      [0, 1, "no"],
-      [1, 1, "maybe"],
-      [0, 0, "maybe"],
+      [1, 1, 0, "yes"],
+      [1, 1, 2, "yes"],
+      [1, 0, 3, "no"],
+      [0, 1, 4, "no"],
+      [0, 1, 1, "no"],
+      [1, 1, 9, "maybe"],
+      [0, 0, 0, "maybe"],
     ];
   
 
-let features = ["non-surfacing", "flippers"];
+let features = ["non-surfacing", "flippers", "something"];
     return [dataset, features];
 }
 
 let [dataset, features] = createDataset();
 let tree = createTree(dataset, features);
-pprintTree(tree);
+printTree(tree);
 
 // Пример тестового датасета
 let testVectors = [
-    [0, 0],
-    [0, 1],
-    [1, 0],
-    [1, 1],
+    [0, 0, 0],
+    [0, 1, 0],
+    [1, 0, 2],
+    [1, 1, 3],
 ];
 
 for (let vec of testVectors) {
