@@ -73,7 +73,7 @@ button {
     color: #FFFFFF;
     border-radius: 15px;
     border: none;
-    background-color: rgba(93, 90, 98, 1);;
+    background-color: rgba(93, 90, 98, 1);
 }
 
 button:hover {
@@ -271,7 +271,39 @@ div.button {
     border-radius: 30px;
 }
 
+div.decision_tree {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    height: 700px;
+    padding-top: 40px;
+}
+
 #claster_button {
     margin-bottom: 0px;
     margin-top: 30px;
+}
+
+#train_upload {
+    width:120%;
+}
+
+label.file_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120%; 
+    height: 100%;
+    font-family: "InterRegular";
+    font-size: 40px;
+    color: #FFFFFF;
+    border-radius: 15px;
+    border: none;
+    background-color: rgba(93, 90, 98, 1);
+    cursor: pointer;
+}
+
+#file-chosen {
+    margin-left: 0.3rem;
+    font-family: sans-serif;
 }

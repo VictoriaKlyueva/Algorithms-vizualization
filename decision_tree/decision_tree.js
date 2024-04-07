@@ -1,6 +1,7 @@
 // https://github.com/abbas-taher/decision-tree-algorithm-example
 // https://github.com/pbharrin/machinelearninginaction3x
 
+/*
 function calculateEntropy(dataset) {
     // Подсчет количесвта уникальных лейблов данных
     let counter = {};
@@ -136,21 +137,21 @@ function printTree(tree) {
     console.log(JSON.stringify(tree, null, 4));
 }
   
-  function createDataset() {
-    // Пока как пример
-    let dataset = [
-      [1, 1, 0, "yes"],
-      [1, 1, 2, "yes"],
-      [1, 0, 3, "no"],
-      [0, 1, 4, "no"],
-      [0, 1, 1, "no"],
-      [1, 1, 9, "maybe"],
-      [0, 0, 0, "maybe"],
-    ];
-  
+function createDataset() {
+  // Пока как пример
+  let dataset = [
+    [1, 1, 0, "yes"],
+    [1, 1, 2, "yes"],
+    [1, 0, 3, "no"],
+    [0, 1, 4, "no"],
+    [0, 1, 1, "no"],
+    [1, 1, 9, "maybe"],
+    [0, 0, 0, "maybe"],
+  ];
 
-let features = ["non-surfacing", "flippers", "something"];
-    return [dataset, features];
+
+  let features = ["non-surfacing", "flippers", "something"];
+  return [dataset, features];
 }
 
 let [dataset, features] = createDataset();
@@ -169,3 +170,52 @@ for (let vec of testVectors) {
     let pred = predict(tree, features, vec);
     console.log(pred);
 }
+*/
+
+// Загрузка обучающей выборки по нажатию кнопки
+const actualBtn = document.getElementById('actual-btn');
+const fileChosen = document.getElementById('file-chosen');
+const button = document.getElementById('train_upload');
+const input = document.querySelector("input");
+
+actualBtn.addEventListener('change', function() {
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    const csv = e.target.result;
+    const rows = csv.split('\n');
+
+    const labels = [];
+    const dataArray = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i].split(',');
+      if (i === 0) {
+        labels.push(row);
+      }
+      else {
+        dataArray.push(row);
+      }
+    }
+
+    console.log("Держимся");
+    console.log(dataArray);
+  };
+
+  reader.readAsText(this.files[0]);
+});
+
+let file;
+var filename;
+button.onclick = () => {
+  console.log("треш");
+  input.click();
+};
+
+button.addEventListener('change', function() {
+  fileChosen.textContent = this.files[0].name;
+});
+
+actualBtn.addEventListener('change', function() {
+  fileChosen.textContent = this.files[0].name
+})
