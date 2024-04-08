@@ -107,7 +107,19 @@
             <button id="maze_button" onclick="mazeProcessing()">Сгенерировать лабиринт</button>
           </div>
           <div class="button">
-            <button id="reset_button">Стереть</button>
+            <button id="reset_button">Очистить</button>
+          </div>
+          <div class="data_choising_A_star">
+              <p class="size_select">Выберите размер лабиринта: </p>
+              <div class="range_info_div">
+                <div class="range_div">
+                  <label for="N_range">10 </label>
+                  <input type="range" id="N_range" name="N" min="10" max="30" value="20"/>
+                  <label for="N_range"> 30</label>
+                </div>
+                <p><output id="N_value"></output></p>
+              </div>
+            </div>
           </div>
       </div>
     </div>
