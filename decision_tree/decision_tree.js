@@ -1,7 +1,7 @@
 // https://github.com/abbas-taher/decision-tree-algorithm-example
 // https://github.com/pbharrin/machinelearninginaction3x
 
-/*
+
 function calculateEntropy(dataset) {
     // Подсчет количесвта уникальных лейблов данных
     let counter = {};
@@ -137,22 +137,12 @@ function printTree(tree) {
     console.log(JSON.stringify(tree, null, 4));
 }
   
-function createDataset() {
-  // Пока как пример
-  let dataset = [
-    [1, 1, 0, "yes"],
-    [1, 1, 2, "yes"],
-    [1, 0, 3, "no"],
-    [0, 1, 4, "no"],
-    [0, 1, 1, "no"],
-    [1, 1, 9, "maybe"],
-    [0, 0, 0, "maybe"],
-  ];
-
-
+function createDataset(dataset) {
   let features = ["non-surfacing", "flippers", "something"];
   return [dataset, features];
 }
+
+/*
 
 let [dataset, features] = createDataset();
 let tree = createTree(dataset, features);
@@ -198,6 +188,10 @@ actualBtn.addEventListener('change', function() {
 
     console.log("Держимся");
     console.log(dataArray);
+
+    let [dataset, features] = createDataset(dataArray);
+    let tree = createTree(dataset, features);
+    printTree(tree);
   };
 
   reader.readAsText(this.files[0]);
