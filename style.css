@@ -295,8 +295,9 @@ div.button {
 div.decision_tree {
     display: flex;
     justify-content: center;
+    flex-direction: row-reverse;
     width: 90%;
-    height: 700px;
+    height: 1000px;
     padding-top: 40px;
 }
 
@@ -313,7 +314,7 @@ label.file_label {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 120%; 
+    width: 100%; 
     height: 100%;
     font-family: "InterRegular";
     font-size: 40px;
