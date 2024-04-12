@@ -223,7 +223,7 @@ canvas.addEventListener("mouseup", function(e) {
   draw = false;
 
   // Cохраняем изображение
-  const image = getImage(context);
+  let image = getImage(context);
 
   // Сжатие изображения до 28 x 28
   let compressedImage = [];
@@ -251,3 +251,12 @@ canvas.addEventListener("mouseup", function(e) {
   // const test_image = Array.from({length: 28 * 28}, () => Math.floor(Math.random() * 40));  
   // console.log("Test:", make_prediction(model, test_image));
 });
+
+// Очистка канваса по нажатию кнопки
+document.getElementById('reset_nn').onclick = resetProcessing;
+function resetProcessing() {
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementsByClassName("predict")[0].innerHTML = "Вердикт: ";
+}

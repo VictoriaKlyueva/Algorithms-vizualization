@@ -375,3 +375,12 @@ function buttonProcessing() {
     data[i].visited = false;
   }
 }
+
+// Очистка канваса по нажатию кнопки
+document.getElementById('reset_clasterization').onclick = resetProcessing;
+function resetProcessing() {
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  data = [];
+}

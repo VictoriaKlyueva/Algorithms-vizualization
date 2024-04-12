@@ -175,13 +175,13 @@ function createCanvasTree(tree) {
   const colorNode = '#F63A62';
   const colorLeaf = '#FFFFFF';
 
-  function drawNode(node, level, x, y) {
+  function drawNode(node, level, x, y, name='') {
     const type = typeof node === 'string' ? 'leaf' : 'node';
     const fill = type === 'leaf' ? colorLeaf : colorNode;
      let mainText, secondText = '';
     if (type === 'leaf') {
-      mainText = Object.keys(node)[0];
-      secondText = 'leaf';
+      mainText = node;
+      // secondText = 'leaf';
     }
     else {
       mainText = Object.keys(node)[0];
@@ -200,7 +200,7 @@ function createCanvasTree(tree) {
       const childCount = Object.keys(children).length;
       const childWidth = nodeWidth / childCount;
       const childHeight = nodeHeight / 2;
-      const childMargin = 70;
+      const childMargin = 90;
 
       let childX = x - childCount / 2 * (childWidth + childMargin);
       for (let i = 0; i < childCount; i++) {

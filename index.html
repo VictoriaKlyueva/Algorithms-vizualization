@@ -33,16 +33,21 @@
       <div class="canvas_div">
         <canvas id="canvas_nn" width="700" height="700"></canvas>
       </div>
-      <script type="module" src="./nn/nn_script.js"></script>
       <div class = info>
         <div class = "image">
           <img src="/images/nn_architecture.svg" width="300px" height="200px">
         </div>
-        <div class="predict">
-          <p>Вердикт: </p>
+        <div class="mini_info">
+          <div class="reset_button">
+            <button id="reset_nn" onclick="resetProcessing()">Очистить</button>
+          </div>
+          <div class="predict">
+            <p>Вердикт: </p>
+          </div>
         </div>
+      </div>
     </div>
-    </div>
+    <script type="module" src="./nn/nn_script.js"></script>
     <div class="algorithm_name">
       <p id="algorithm_name_clasterization" class="italic_text">Кластеризация<br/></p>
     </div>
@@ -86,9 +91,16 @@
             </div>
           </div>
         </div>
-        <div class="button">
-          <button id="claster_button" onclick="buttonProcessing()">Кластеризировать</button>
+
+        <div class="mini_info">
+          <div class="reset_button">
+            <button id="reset_clasterization" onclick="resetProcessing()">Очистить</button>
+          </div>
+          <div class="claster_button_div">
+            <button id="claster_button" onclick="buttonProcessing()">Кластеризировать</button>
+          </div>
         </div>
+        
       </div>
       <script type="module" src="./clasterisation/clasterisation.js"></script>
     </div>
