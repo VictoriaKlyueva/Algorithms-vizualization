@@ -109,7 +109,7 @@
       <p id="algorithm_name_A_star" class="italic_text">A star<br/></p>
     </div>
     <div class="algo_div">
-        <div class="canvas_div">
+        <div class="canvas_div_a_star">
           <canvas type="module" id="canvas_A_star" width="700" height="700"></canvas>
         </div>
         <div class = info>
@@ -183,6 +183,9 @@
         <div class="button">
           <input type="file" id="actual-btn" hidden/>
           <label class="file_label" for="actual-btn">Загрузите обучающую выборку</label>
+        </div>
+        <div class="button">
+          <button id="tree_reset" onclick="resetProcessing()">Очистить</button>
         </div>
       </div>
       <script type="module" src="./genetic_algorithm/genetic_algorithm.js"></script>

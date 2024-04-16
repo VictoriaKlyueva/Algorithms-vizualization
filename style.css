@@ -65,6 +65,13 @@ a {
     color: rgba(255, 255, 255, 0.6);
 }
 
+p:hover{
+    transition:all 1s linear;
+     padding-bottom: 20px;
+     box-sizing: border-box;
+    
+  }
+
 button {
     float: left;
     width: 100%; 
