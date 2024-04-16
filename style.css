@@ -38,6 +38,7 @@
     padding: 0;
 }
 
+
 body {
     background: url("images/background.jpg"), #05020D;
     background-repeat: no-repeat;
@@ -72,38 +73,64 @@ button {
     font-size: 40px;
     color: #FFFFFF;
     border-radius: 30px;
-    border: none;
+    border: 2px solid rgba(93, 90, 98, 1);
     background-color: rgba(93, 90, 98, 1);
 }
 
 button:hover {
     background: rgba(93, 90, 98, 0.5);
-    border-radius: 15px;
+    border-radius: 30px;
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 button:active {
     background: rgba(93, 90, 98, 0.75);
-    border-radius: 15px;
+    border-radius: 30px;
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
+label.file_label:hover {
+    background: rgba(93, 90, 98, 0.5);
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+label.file_label:active {
+    background: rgba(93, 90, 98, 0.75);
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2); 
+}
+
 img {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding-left: 35px;
-    width: 90%;
-    height: 100%;
     margin: auto;
     border-radius: 30px;
 }
 
+div.canvas_div {
+    width: 100%;
+    height: 100%;
+    min-width: 20%;
+    min-height: 20%;
+}
+
 canvas {
+    width: 100%;
+    height: 100%;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
+}
+
+#canvas_A_star {
+    width: auto;
+    height: auto;
 }
 
 input[type="range"] {
@@ -174,6 +201,7 @@ div.algo_div {
 
 div.info {
     width: 100%;
+    height: auto;
     display: flex;
     margin-left: 30px;
     flex-direction: column;
@@ -204,6 +232,7 @@ div.claster_button_div {
 
 div.image {
     float: left;
+    width: 100%;
     height: 75%;
     border: 2px solid rgba(143, 141, 145, 0.2);
     background: rgba(255, 255, 255, 0.1);
@@ -219,7 +248,7 @@ div.predict {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 30px;
 
-    font-family: "InterBold";
+    font-family: "InterMedium";
     font-size: 45px;
     display: flex;
     align-items: center;
@@ -343,7 +372,7 @@ label.file_label {
     font-size: 40px;
     color: #FFFFFF;
     border-radius: 30px;
-    border: none;
+    border: 2px solid rgba(93, 90, 98, 1);
     background-color: rgba(93, 90, 98, 1);
     cursor: pointer;
 }

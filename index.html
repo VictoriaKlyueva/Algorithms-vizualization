@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="Визуализация алгоритмов" content="На данном сайте представлены визуализации 6 алгоритмов.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Визуализация алгоритмов</title>
 
@@ -34,8 +35,8 @@
         <canvas id="canvas_nn" width="700" height="700"></canvas>
       </div>
       <div class = info>
-        <div class = "image">
-          <img src="/images/nn_architecture.svg" width="300px" height="200px">
+        <div class = "image" >
+          <img src="/images/nn_architecture.svg">
         </div>
         <div class="mini_info">
           <div class="reset_button">
@@ -126,7 +127,7 @@
               <div class="range_info_div">
                 <div class="range_div">
                   <label for="N_range">10 </label>
-                  <input type="range" id="N_range" name="N" min="10" max="30" value="20"/>
+                  <input type="range" id="N_range" name="N" min="10" max="30" step="2" value="20"/>
                   <label for="N_range"> 30</label>
                 </div>
                 <p><output id="N_value"></output></p>

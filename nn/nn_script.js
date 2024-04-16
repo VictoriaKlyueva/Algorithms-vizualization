@@ -194,7 +194,7 @@ canvas.addEventListener("mousedown", function(e) {
     draw = true;
     context.beginPath();
 
-    context.lineWidth = 35; 
+    context.lineWidth = 50; 
     context.lineCap = 'round'; 
     context.strokeStyle = 'white'; 
 
