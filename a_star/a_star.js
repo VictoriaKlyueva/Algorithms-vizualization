@@ -9,6 +9,7 @@ var endPoint;
 var colorEnds = '#7000FF';
 var pathColor = '#7000FF';
 var isEditing = true;
+isCleared = false;
 
 setDefoltValues();
 
@@ -80,28 +81,53 @@ canvas.addEventListener('dblclick', function(event) {
     let cellX = Math.floor(x / cellSize);
     let cellY = Math.floor(y / cellSize);
 
-    if (!maze[cellY][cellX]) {
-        if (!isStart) {
-            startPoint.x = cellX;
-            startPoint.y = cellY;
-            isStart = true;
+    if (!isStart) {
+        startPoint.x = cellX;
+        startPoint.y = cellY;
+        isStart = true;
+        maze[cellY][cellX] = false;
 
-            context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
-            context.strokeRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
-        }
+        context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
+        context.strokeRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
+    }
 
-        else if (!isEnd) {
-            endPoint.x = cellX;
-            endPoint.y = cellY;
-            isEnd = true;
+    else if (!isEnd) {
+        endPoint.x = cellX;
+        endPoint.y = cellY;
+        isEnd = true;
+        maze[cellY][cellX] = false;
 
-            context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
-            context.strokeRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
-        }
+        context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
+        context.strokeRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
+    }
+
+
+    else if (isStart && startPoint.x === cellX && startPoint.y === cellY) {
+        context.fillStyle = '#1E1C26';
+        context.strokeStyle = '#1E1C26';
+
+        context.fillRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
+        context.strokeRect(startPoint.x * cellSize, startPoint.y * cellSize, cellSize, cellSize);
+
+        startPoint = { x: null, y: null };
+        isStart = false;
+    }
+
+    else if (isEnd && endPoint.x === cellX && endPoint.y === cellY) {
+        context.fillStyle = '#1E1C26';
+        context.strokeStyle = '#1E1C26';
+
+        context.fillRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
+        context.strokeRect(endPoint.x * cellSize, endPoint.y * cellSize, cellSize, cellSize);
+
+        endPoint = { x: null, y: null };
+        isEnd = false;
     }
 });
 
+// Очистка canvas по нажатию
 document.getElementById('reset_button').onclick = function() {
+    isCleared = true;
     setDefoltValues();
     resetCanvas();
 };
@@ -213,7 +239,7 @@ async function AStarWithDrawing(startX, startY, endX, endY, maze, time=20) {
 
     openList.push(startNode);
 
-    while (openList.length > 0) {
+    while (openList.length > 0 && !isCleared) {
         let currentNode = openList.reduce((acc, node) => node.f < acc.f ? node : acc, openList[0]);
 
         if (currentNode !== startNode) {
@@ -270,8 +296,10 @@ async function AStarWithDrawing(startX, startY, endX, endY, maze, time=20) {
             openList.push(neighborNode);
         });
     }
-
-    window.alert("Пути не существует");
+    
+    if (!isCleared) {
+        window.alert("Пути не существует");
+    }
     return;
 }
 
@@ -283,10 +311,12 @@ function drawCeil(x, y, currentColor='#F73A53') {
     context.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
 }
 
+var N;
 // Отрисовка лабиринта по нажатию по кнопке
 document.getElementById('maze_button').onclick = mazeProcessing;
 function mazeProcessing() {
-    var N = Number(document.getElementById('N_range').value) + 1;
+    isCleared = false;
+    N = Number(document.getElementById('N_range').value) + 1;
     createMaze(N);
 }
 
@@ -302,6 +332,7 @@ NInput.addEventListener("input", (event) => {
 document.getElementById('a_star_button').onclick = buttonProcessing;
 function buttonProcessing() {
     console.log(startPoint, endPoint);
+
     if (startPoint.x !== null & startPoint.y !== null & endPoint.x !== null & endPoint.y !== null) {
         AStarWithDrawing(startPoint.y, startPoint.x, endPoint.y, endPoint.x, maze);
     }
