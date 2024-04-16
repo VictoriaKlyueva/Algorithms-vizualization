@@ -11,7 +11,7 @@ const NUM_POPULATION = 1000;
 const NUM_GENERATIONS = 100000;
 const MUTATION_RATE = 0.3;
 
-let lengthOfChromosome;
+let lengthOfChromosome = 0;
 
 function randomNumber(left, right) {
     return  Math.floor(Math.random() * (right - left) + left);
@@ -20,13 +20,13 @@ function randomNumber(left, right) {
 function getFirstPopulation(firstGeneration){
     let res = [];
     let current = firstGeneration.slice();
-    current.push(distance(current));
+    current.push(chromosomeDistance(current));
     res.push(current);
 
     for (let i = 0; i < Math.pow(vertecies.length, 2); i++) {
         current = firstGeneration.slice();
         current = shuffleArray(current)
-        current.push(distance(current));
+        current.push(chromosomeDistance(current));
         res.push(current)
     }
 
@@ -52,7 +52,7 @@ function addToPopulation(population, chromosome) {
     }
 }
 
-function distance(chromosome){
+function chromosomeDistance(chromosome){
     let ans = 0;
     for (let i = 0; i < chromosome.length - 1; i++) {
         ans += Math.sqrt(Math.pow(chromosome[i][0] - chromosome[i + 1][0], 2) + Math.pow(chromosome[i][1] - chromosome[i + 1][1], 2));
@@ -66,7 +66,7 @@ function cross(firstParent, secondParent){
 
     let randomSubGen = firstParent.slice(randomNumber(0, firstParent.length), 
                                      randomNumber(randomNumber(0, firstParent.length) + 1, 
-                                                  firstParent.length) + 1)
+                                                  firstParent.length) + 1);
 
     child = randomSubGen;
 
@@ -78,7 +78,7 @@ function cross(firstParent, secondParent){
 
     if (Math.random() < MUTATION_RATE){
         let index1 = randomNumber(1, lengthOfChromosome);
-        let index2 = randomNumber(1, lengthOfChromosome)
+        let index2 = randomNumber(1, lengthOfChromosome);
 
         if (index1 != index2) {
             child[index1], child[index2] = child[index2], child[index1];
@@ -92,8 +92,8 @@ function makeChild(firstParent, secondParent) { // 18+
     let firstChild = cross(firstParent, secondParent);
     let secondChild = cross(firstParent, secondParent);
 
-    firstChild.push(distance(firstChild))
-    secondChild.push(distance(secondChild))
+    firstChild.push(chromosomeDistance(firstChild));
+    secondChild.push(chromosomeDistance(secondChild));
 
     let child = [firstChild, secondChild];
     return child;
@@ -121,7 +121,7 @@ async function geneticAlgorithm() {
 
     for(let i = 0; i < NUM_GENERATIONS; i++) {
         if (i === NUM_ITERATIONS) {
-            plotLines(bestChromosome)
+            plotLines(bestChromosome);
             break;
         }
 
@@ -136,15 +136,15 @@ async function geneticAlgorithm() {
 
             let child = makeChild(firstParent, secondParent);
 
-            population.push(child[0])
-            population.push(child[1])
+            population.push(child[0]);
+            population.push(child[1]);
         }
 
         population.sort((function (a, b) {
-            return a[a.length - 1] - b[b.length - 1]
+            return a[a.length - 1] - b[b.length - 1];
         }));
 
-        if (JSON.stringify(bestChromosome) !== JSON.stringify(population[0])){
+        if (JSON.stringify(bestChromosome) !== JSON.stringify(population[0])) {
             bestChromosome = population[0].slice();
         }
 
@@ -184,7 +184,7 @@ function plotLines(bestPath, color="white") {
         context.moveTo(bestPath[i][0] + vector[0] * 10 / s, bestPath[i][1] + vector[1] * 10 / s);
         context.lineTo(bestPath[i + 1][0] - vector[0] * 10 / s, bestPath[i + 1][1] - vector[1] * 10 / s);
 
-        context.stroke()
+        context.stroke();
     }
 }
 
