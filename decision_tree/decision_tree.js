@@ -247,6 +247,8 @@ actualBtn.addEventListener('change', function() {
     printTree(tree);
 
     createCanvasTree(tree);
+
+    
   };
 
   reader.readAsText(this.files[0]);

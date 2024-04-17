@@ -395,3 +395,7 @@ div.canvas_decision_tree_div {
     min-width: 20%;
     min-height: 20%;
 }
+
+#canvas_decision_tree {
+    width: 100%;
+}

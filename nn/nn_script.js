@@ -6,6 +6,11 @@ const context = canvas.getContext("2d");
 const w = canvas.width;
 const h = canvas.height;
 
+// Задаем параметры модели
+const NUM_INPUTS = 28 * 28;
+const HIDDEN_SIZE = 300;
+const NUM_OUTPUTS = 10;
+
 class NeuralNetwork {
     constructor(inputs, hidden, outputs) {
       this.first_layer = {};
@@ -154,28 +159,26 @@ function getImage(context) {
   const imageData = context.getImageData(0, 0, w, h);
   const pixels = imageData.data;
 
+  console.log(pixels);
+
   const monochromeImage = [];
 
   for (let i = 0; i < pixels.length; i += 4) {
-      // Получаем значения RGB компонент пикселя
-      const red = pixels[i];
-      const green = pixels[i + 1];
-      const blue = pixels[i + 2];
-    
-      // Вычисляем яркость пикселя
-      const brightness = Math.round((red + green + blue) / 3);
-    
-      // Создаем новый пиксель в черно-белом цвете и добавляем его в массив
-      monochromeImage.push(brightness);
-    }
+    // Получаем значения RGB компонент пикселя
+    const red = pixels[i];
+    const green = pixels[i + 1];
+    const blue = pixels[i + 2];
+  
+    // Вычисляем яркость пикселя
+    // const brightness = Math.round((red + green + blue) / 3);
+    const brightness = Math.round((red + green + blue) / 3);
+  
+    // Создаем новый пиксель в черно-белом цвете и добавляем его в массив
+    monochromeImage.push(brightness);
+  }
 
   return monochromeImage;
 }
-
-// Задаем параметры модели
-const NUM_INPUTS = 28 * 28;
-const HIDDEN_SIZE = 300;
-const NUM_OUTPUTS = 10;
 
 // Создаем модель
 const model = new NeuralNetwork(NUM_INPUTS, HIDDEN_SIZE, NUM_OUTPUTS);
@@ -194,7 +197,7 @@ canvas.addEventListener("mousedown", function(e) {
     draw = true;
     context.beginPath();
 
-    context.lineWidth = 50; 
+    context.lineWidth = 15; 
     context.lineCap = 'round'; 
     context.strokeStyle = 'white'; 
 
@@ -212,6 +215,27 @@ canvas.addEventListener("mousemove", function(e) {
     }
 });
 
+function compressPhoto(photo, width, height, newWidth, newHeight) {
+  const pixelSizeX = width / newWidth;
+  const pixelSizeY = height / newHeight;
+  let compressedPhoto = [];
+
+  for (let i = 0; i < newHeight; i++) {
+    for (let j = 0; j < newWidth; j++) {
+      let sum = 0;
+      for (let y = i * pixelSizeY; y < (i + 1) * pixelSizeY; y++) {
+        for (let x = j * pixelSizeX; x < (j + 1) * pixelSizeX; x++) {
+          sum += photo[y * width + x];
+        }
+      }
+      const average = Math.floor(sum / (pixelSizeX * pixelSizeY));
+      compressedPhoto.push(average);
+    }
+  }
+
+  return compressedPhoto;
+}
+
 // Мышь опущена
 canvas.addEventListener("mouseup", function(e) {
   mouse.x = e.pageX - this.offsetLeft;
@@ -226,23 +250,9 @@ canvas.addEventListener("mouseup", function(e) {
   let image = getImage(context);
 
   // Сжатие изображения до 28 x 28
-  let compressedImage = [];
-  for (let i = 0; i < 28; i++) {
-    for (let j = 0; j < 28; j++) {
-      let pixelSum = 0;
-
-      // Суммируем значения всех пикселей, относящихся к одному пикселю сжатого изображения
-      for (let k = i * 25; k < (i + 1) * 25; k++) {
-        for (let l = j * 25; l < (j + 1) * 25; l++) {
-          pixelSum += image[k * 700 + l];
-        }
-      }
-
-      // Вычисляем среднее значение цвета
-      let avgPixel = Math.floor(pixelSum / 625 - 1);
-      compressedImage.push(avgPixel);
-    }
-  }
+  let compressedImage = compressPhoto(image, 700, 700, 28, 28);;
+  
+  console.log("Image:", image, "Compressed:", compressedImage);
   
   const prediction = makePrediction(model, compressedImage);
   console.log("Pred:", prediction);
