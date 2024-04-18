@@ -197,7 +197,7 @@ function createCanvasTree(tree) {
         // Рисуем ребра от родителя к детям
         context.beginPath();
         context.strokeStyle = '#000';
-        context.moveTo(x + nodeWidth * (mainText.length + 5) / 2, y + nodeHeight);
+        context.moveTo(x + nodeWidth * (mainText.length) / 2, y + nodeHeight);
         context.lineTo(childX + childWidth / 2, childY);
         context.stroke();
       }
@@ -205,7 +205,7 @@ function createCanvasTree(tree) {
   }
 
   const rootNode = tree;
-  const rootX = width / 2 - nodeWidth * (Object.keys(rootNode)[0].length) / 2;
+  const rootX = (width - nodeWidth) / 4;
   const rootY = margin;
   drawNode(rootNode, 0, rootX, rootY);
 }
@@ -244,11 +244,10 @@ actualBtn.addEventListener('change', function() {
     tree = createTree(dataArray, features);
 
     console.log(tree);
+    context.scale(0.9 * tree.size, 0.9 * tree.size)
     printTree(tree);
 
     createCanvasTree(tree);
-
-    
   };
 
   reader.readAsText(this.files[0]);

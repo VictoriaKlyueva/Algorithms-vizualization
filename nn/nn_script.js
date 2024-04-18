@@ -12,122 +12,122 @@ const HIDDEN_SIZE = 300;
 const NUM_OUTPUTS = 10;
 
 class NeuralNetwork {
-    constructor(inputs, hidden, outputs) {
-      this.first_layer = {};
-      this.second_layer = {};
-  
-      this.first_layer.para = this.getRandomMatrix(hidden, inputs) / Math.sqrt(inputs);
-      this.first_layer.bias = this.getRandomMatrix(hidden, 1) / Math.sqrt(hidden);
-      this.second_layer.para = this.getRandomMatrix(outputs, hidden) / Math.sqrt(hidden);
-      this.second_layer.bias = this.getRandomMatrix(outputs, 1) / Math.sqrt(hidden);
-  
-      this.input_size = inputs;
-      this.hid_size = hidden;
-      this.output_size = outputs;
-    }
-  
-    activationFunction(z, type = 'relu', derivative = false) {
-      if (type == 'relu') {
-        if (derivative) {
-          return z.map((i) => i > 0 ? 1 : 0);
-        } else {
-          return z.map((i) => i > 0 ? i : 0);
-        }
-      } else if (type == 'leakyrelu') {
-        if (derivative) {
-          return z.map((i) => i >= 0 ? 1 : 0.01);
-        } else {
-          return z.map((i) => i >= 0 ? i : 0.01 * i);
-        }
-      } else if (type == 'sigmoid') {
-        if (derivative) {
-          return z.map((i) => (1 / (1 + Math.exp(-i))) * (1 - 1 / (1 + Math.exp(-i))));
-        } else {
-          return z.map((i) => 1 / (1 + Math.exp(-i)));
-        }
-      } else if (type == 'tanh') {
-        if (derivative) {
-          return z.map((i) => 1 - Math.pow(Math.tanh(i), 2));
-        } else {
-          return z.map((i) => 1 - Math.pow(Math.tanh(i), 2));
-        }
+  constructor(inputs, hidden, outputs) {
+    this.first_layer = {};
+    this.second_layer = {};
+
+    this.first_layer.para = this.getRandomMatrix(hidden, inputs) / Math.sqrt(inputs);
+    this.first_layer.bias = this.getRandomMatrix(hidden, 1) / Math.sqrt(hidden);
+    this.second_layer.para = this.getRandomMatrix(outputs, hidden) / Math.sqrt(hidden);
+    this.second_layer.bias = this.getRandomMatrix(outputs, 1) / Math.sqrt(hidden);
+
+    this.input_size = inputs;
+    this.hid_size = hidden;
+    this.output_size = outputs;
+  }
+
+  activationFunction(z, type = 'relu', derivative = false) {
+    if (type == 'relu') {
+      if (derivative) {
+        return z.map((i) => i > 0 ? 1 : 0);
       } else {
-        throw new TypeError('Invalid type!');
+        return z.map((i) => i > 0 ? i : 0);
+      }
+    } else if (type == 'leakyrelu') {
+      if (derivative) {
+        return z.map((i) => i >= 0 ? 1 : 0.01);
+      } else {
+        return z.map((i) => i >= 0 ? i : 0.01 * i);
+      }
+    } else if (type == 'sigmoid') {
+      if (derivative) {
+        return z.map((i) => (1 / (1 + Math.exp(-i))) * (1 - 1 / (1 + Math.exp(-i))));
+      } else {
+        return z.map((i) => 1 / (1 + Math.exp(-i)));
+      }
+    } else if (type == 'tanh') {
+      if (derivative) {
+        return z.map((i) => 1 - Math.pow(Math.tanh(i), 2));
+      } else {
+        return z.map((i) => 1 - Math.pow(Math.tanh(i), 2));
+      }
+    } else {
+      throw new TypeError('Invalid type!');
+    }
+  }
+  
+  softmax(z) {
+    const expZ = z.map((i) => Math.exp(i));
+    const sumExpZ = expZ.reduce((sum, i) => sum + i);
+    return expZ.map((i) => i / sumExpZ);
+  }
+
+  crossEntropyError(v, y) {
+    return -Math.log(v[y]);
+  }
+
+  forward(x, y) {
+    const z = this.addMatrices(this.matrixMultiply(this.first_layer.para, x).map((i) => [i]), this.first_layer.bias);
+    const h = this.activationFunction(z).map((i) => [i]);
+    const u = this.addMatrices(this.matrixMultiply(this.second_layer.para, h).map((i) => [i]), this.second_layer.bias);
+    const predictList = this.softmax(u).flat();
+    const error = this.crossEntropyError(predictList, y);
+
+    const dataDict = {
+      z: z,
+      h: h,
+      u: u,
+      f_X: [predictList],
+      error: error
+    };
+    return dataDict;
+  }
+
+  getRandomMatrix(rows, cols) {
+    const matrix = [];
+    for (let i = 0; i < rows; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < cols; j++) {
+        matrix[i][j] = Math.random();
       }
     }
-  
-    softmax(z) {
-      const expZ = z.map((i) => Math.exp(i));
-      const sumExpZ = expZ.reduce((sum, i) => sum + i);
-      return expZ.map((i) => i / sumExpZ);
+    return matrix;
+  }
+
+  addMatrices(matrix1, matrix2) {
+    // Проверка, что размеры матриц совпадают
+    if (matrix1.length !== matrix2.length || matrix1[0].length !== matrix2[0].length) {
+      throw new Error('Размеры матриц не совпадают');
     }
   
-    crossEntropyError(v, y) {
-      return -Math.log(v[y]);
-    }
+    const result = [];
   
-    forward(x, y) {
-      const z = this.addMatrices(this.matrixMultiply(this.first_layer.para, x).map((i) => [i]), this.first_layer.bias);
-      const h = this.activationFunction(z).map((i) => [i]);
-      const u = this.addMatrices(this.matrixMultiply(this.second_layer.para, h).map((i) => [i]), this.second_layer.bias);
-      const predictList = this.softmax(u).flat();
-      const error = this.crossEntropyError(predictList, y);
+    for (let i = 0; i < matrix1.length; i++) {
+      const row1 = matrix1[i];
+      const row2 = matrix2[i];
   
-      const dataDict = {
-        z: z,
-        h: h,
-        u: u,
-        f_X: [predictList],
-        error: error
-      };
-      return dataDict;
-    }
-  
-    getRandomMatrix(rows, cols) {
-      const matrix = [];
-      for (let i = 0; i < rows; i++) {
-        matrix[i] = [];
-        for (let j = 0; j < cols; j++) {
-          matrix[i][j] = Math.random();
-        }
+      const newRow = [];
+
+      for (let j = 0; j < row1.length; j++) {
+        newRow.push(row1[j] + row2[j]);
       }
-      return matrix;
-    }
   
-    addMatrices(matrix1, matrix2) {
-      // Проверка, что размеры матриц совпадают
-      if (matrix1.length !== matrix2.length || matrix1[0].length !== matrix2[0].length) {
-        throw new Error('Размеры матриц не совпадают');
-      }
-    
-      const result = [];
-    
-      for (let i = 0; i < matrix1.length; i++) {
-        const row1 = matrix1[i];
-        const row2 = matrix2[i];
-    
-        const newRow = [];
+      result.push(newRow);
+    }
+    return result;
+  }
   
-        for (let j = 0; j < row1.length; j++) {
-          newRow.push(row1[j] + row2[j]);
-        }
-    
-        result.push(newRow);
+  matrixMultiply(firstMatrix, secondMatrix) {
+    let result = Array(firstMatrix.length)
+    for (let i = 0; i < firstMatrix.length; i++) {
+      let sum = 0;
+      for (let j = 0; j < firstMatrix[0].length; j++) {
+        sum += firstMatrix[i][j] * secondMatrix[j]
       }
-      return result;
+      result[i] = sum;
     }
-    
-    matrixMultiply(firstMatrix, secondMatrix) {
-      let result = Array(firstMatrix.length)
-      for (let i = 0; i < firstMatrix.length; i++) {
-        let sum = 0;
-        for (let j = 0; j < firstMatrix[0].length; j++) {
-          sum += firstMatrix[i][j] * secondMatrix[j]
-        }
-        result[i] = sum;
-      }
-      return result;
-    }
+    return result;
+  }
 }
   
 function makePrediction(model, image) {
@@ -234,6 +234,72 @@ function compressPhoto(photo, width, height, newWidth, newHeight) {
   }
 
   return compressedPhoto;
+}
+
+function scanX(fromLeft, imgData) {
+  var offset = fromLeft? 1 : -1;
+
+  for(var x = fromLeft ? 0 : imgWidth - 1; fromLeft ? (x < imgWidth) : (x > -1); x += offset) {
+    for(var y = 0; y < imgHeight; y += 4) {
+      let index = (y * imgHeight) + x;
+      if (imgData[index] != 0) {
+        if (fromLeft) {
+          return x;
+        }
+        else {
+          return Math.min(x + 1, imgWidth);
+        }
+      }      
+    }
+  }
+  return null;
+};
+
+function scanY(fromTop, imgData) {
+  var offset = fromTop ? 1 : -1;
+
+  for(var y = fromTop ? 0 : imgHeight - 1; fromTop ? (y < imgHeight) : (y > -1); y += offset) {
+    for(var x = 0; x < imgWidth; x++) {
+      let index = (y * imgHeight) + x;
+      if (imgData[index] != 0) {
+        if (fromTop) {
+          return y;
+        }
+        else {
+          return Math.min(y + 1, imgHeight);
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function imageCenterig(imgData, image) {
+  let test = new Array(imgHeight * imgWidth); 
+    for (let i = 3; i < imgData.length; i += 4) {
+      test[ Math.floor(i / 4) ] = (imgData[i] / 255);
+    }
+
+    // найти границы цифры
+    let cropTop = scanY(true, test);
+    let cropBottom = scanY(false, test);
+    let cropLeft = scanX(true, test);
+    let cropRight = scanX(false, test);
+
+    let cropXDiff = cropRight - cropLeft;
+    let cropYDiff = cropBottom - cropTop;
+
+    cnv.width = 28;
+    cnv.height = 28;
+
+    // Просчитывание паддингов чтобы цифра была не во весь канвас
+    let size = Math.floor(Math.max(cropXDiff, cropYDiff) * 0.3) * 2 + Math.max(cropXDiff, cropYDiff);
+    let gorizontalPaddings = Math.floor((size - cropXDiff) / 2);
+    let verticalPaddings = Math.floor((size - cropYDiff) / 2);
+
+    // Нарисовать итоговое изображение
+    // ctx.drawImage(image, cropLeft - gorizontalPaddings, cropTop - verticalPaddings, cropXDiff + (gorizontalPaddings * 2), cropYDiff + (verticalPaddings * 2), 0, 0, 28, 28);
+    // return ctx.getImageData(0, 0, 28, 28).data;
 }
 
 // Мышь опущена
