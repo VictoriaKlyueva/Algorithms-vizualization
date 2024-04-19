@@ -5,49 +5,43 @@ const context = canvas.getContext("2d");
 
 let vertecies = [];
 
-const NUM_ITERATIONS = 1000;
-const NUM_GENERATIONS = 100000;
-const MUTATION_RATE = 0.3;
+const numIterations = 1000;
+const numGenerations = 10000;
+const mutationRate = 0.3;
 
-let lengthOfChromosome = 0;
+const badChromosomesColor = 'rgba(255,255,255,0.1)';
+const trailColor = '#7000FF';
 
-
-document.getElementById("genetic_algorithm_button").onclick = geneticAlgorithm;
 async function geneticAlgorithm() {
     resetProcessing(false);
-    for (let i = 0; i < vertecies.length; i++) {
-        plotDot(vertecies[i][0], vertecies[i][1], 20);
-    }
-
+    plotVertecies();
     let firstGeneration = [];
 
     for (let i = 0; i < vertecies.length; i++) {
         firstGeneration.push(vertecies[i]);
     }
 
-    lengthOfChromosome = firstGeneration.length;
-
     let population = getFirstPopulation(vertecies, firstGeneration);
     population.sort((function (a, b) { return a[a.length - 1] - b[b.length - 1]}));
 
     let bestChromosome = population[0];
 
-    for(let i = 0; i < NUM_GENERATIONS; i++) {
-        if (i === NUM_ITERATIONS) {
+    for(let i = 0; i < numGenerations; i++) {
+        if (i === numIterations) {
             plotLines(bestChromosome);
             break;
         }
 
-        population = population.slice(0, vertecies.length * vertecies.length);
+        population = population.slice(0, Math.pow(vertecies.length, 2));
 
-        for (let j = 0; j < vertecies.length * vertecies.length; j++) {
+        for (let j = 0; j < Math.pow(vertecies.length, 2); j++) {
             let index1 = randomNumber(0, population.length);
             let index2 = randomNumber(0, population.length);
 
             let firstParent = population[index1].slice(0, population[index1].length - 1);
             let secondParent = population[index2].slice(0, population[index2].length - 1);
 
-            let child = makeChild(firstParent, secondParent, MUTATION_RATE);
+            let child = makeChild(firstParent, secondParent, mutationRate);
 
             population.push(child[0]);
             population.push(child[1]);
@@ -57,13 +51,21 @@ async function geneticAlgorithm() {
             return a[a.length - 1] - b[b.length - 1];
         }));
 
+        // Путь изменился
         if (JSON.stringify(bestChromosome) !== JSON.stringify(population[0])) {
+            // Рисуем предполагаемый путь на текуще шаге
+            if (i >= 100) {
+                plotLines(bestChromosome, badChromosomesColor);
+            }
             bestChromosome = population[0].slice();
         }
+    }
+    plotVertecies();
+}
 
-        for (let i = 0; i < vertecies.length; i++) {
-            plotDot(vertecies[i][0], vertecies[i][1], 20);
-        }
+function plotVertecies() {
+    for (let vertex of vertecies) {
+        plotDot(vertex[0], vertex[1], 20);
     }
 }
 
@@ -81,12 +83,12 @@ function plotDot(x, y, radius, color='white') {
     context.closePath();
 }
 
-function plotLines(bestPath, color="white") {
+function plotLines(bestPath, color=trailColor) {
     bestPath.splice(bestPath.length - 1, 0, bestPath[0]);
     console.log("Best path lenght: ", bestPath[bestPath.length - 1]);
 
     context.strokeStyle = color;
-    context.lineWidth = "7";
+    context.lineWidth = 7;
     context.lineCap = "round";
 
     context.beginPath();
@@ -99,6 +101,7 @@ function plotLines(bestPath, color="white") {
 
         context.stroke();
     }
+    context.closePath();
 }
 
 // Расстановка точек пользователем
@@ -107,11 +110,16 @@ canvas.addEventListener("click", (e) => {
     let y = e.pageY - e.target.offsetTop;
 
     context.beginPath();
-
     plotDot(x, y, 20);
-
     vertecies.push([x, y]);
+    context.closePath();
 });
+
+// Запуск алгоритма по нажатию кнопки
+document.getElementById("genetic_algorithm_button").onclick = buttonProcessing;
+function buttonProcessing() {
+    geneticAlgorithm();
+}
 
 // Очистка canvas по нажатию кнопки
 document.getElementById("genetic_algorithm_reset").onclick = resetProcessing;
