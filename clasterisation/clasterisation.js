@@ -1,277 +1,12 @@
+import { KMeans } from "./Kmeans.js";
+import { findConnectedComponents } from "./findConnectedComponents.js";
+import { DBSCAN } from "./DBSCAN.js";
+
 const canvas = document.getElementById("canvas_clasterisation");
 const context = canvas.getContext("2d");
 
 // Количесвто нажатий на canvas
 var clicks = 0;
-
-// функция для расчета расстояния между двумя точками
-function calculateDistance(x1, y1, x2, y2) {
-  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-}
-
-function getGraph(data) {
-  let graph = [];
-  
-  // Инициализируем граф нулями
-  for (let i = 0; i < clicks; i++) {
-    graph[i] = [];
-    for (let j = 0; j < clicks; j++) {
-      graph[i][j] = 0;
-    }
-  }
-
-  // заполняем граф
-  for (let i = 0; i < clicks; i++) {
-    for (let j = i; j < clicks; j++) {
-        graph[i][j] = calculateDistance(data[i].x, data[i].y, data[j].x, data[j].y);
-        graph[j][i] = calculateDistance(data[i].x, data[i].y, data[j].x, data[j].y);
-    }
-  }
-
-  return graph;
-}
-
-function findConnectedComponents(data, distance=100) {
-  const adjacencyList = {};
-  const visited = new Set();
-  const components = [];
-
-  for (let i = 0; i < data.length; i++) {
-    adjacencyList[i] = [];
-  }
-
-  // Build adjacency list
-  for (let i = 0; i < data.length - 1; i++) {
-    const x1 = data[i].x;
-    const y1 = data[i].y;
-    adjacencyList[i] = [];
-    
-    for (let j = i + 1; j < data.length; j++) {
-      const x2 = data[j].x;
-      const y2 = data[j].y;
-      
-      const currentDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-      
-      if (currentDistance < distance) {
-        adjacencyList[i].push(j);
-        adjacencyList[j].push(i);
-      }
-    }
-  }
-
-  // Depth-first search function
-  function dfs(node, component) {
-    visited.add(node);
-    component.push(node);
-    
-    for (const neighbor of adjacencyList[node]) {
-      if (!visited.has(neighbor)) {
-        dfs(neighbor, component);
-      }
-    }
-  }
-
-  // Find connected components
-  for (let i = 0; i < data.length; i++) {
-    if (!visited.has(i)) {
-      const component = [];
-      dfs(i, component);
-      components.push(component);
-    }
-  }
-
-  function toDots(components) {
-    let clasters = [];
-    for (let i = 0; i < components.length; i++) {
-      clasters[i] = [];
-    }
-
-    for (let i = 0; i < components.length; i++) {
-      for (let j = 0; j < components[i].length; j++) {
-        clasters[i].push(data[components[i][j]]);
-      }
-    }
-
-    return clasters;
-  }
-
-  return toDots(components);
-}
-
-
-function DBSCAN(points, eps=100, minPts=1) {
-  let clusters = [];
-  let noise = [];
-
-  function distance(p1, p2) {
-    const dx = p1.x - p2.x;
-    const dy = p1.y - p2.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  function regionQuery(point) {
-    return points.filter(p => distance(p, point) <= eps);
-  }
-
-  function expandCluster(point, neighborPoints, clusterId) {
-    clusters[clusterId] = clusters[clusterId] || [];
-    clusters[clusterId].push(point);
-    point.visited = true;
-
-    neighborPoints.forEach(neighbor => {
-      if (!neighbor.visited) {
-        neighbor.visited = true;
-        const neighborNeighborPoints = regionQuery(neighbor);
-
-        if (neighborNeighborPoints.length >= minPts) {
-          neighborPoints = neighborPoints.concat(neighborNeighborPoints);
-        }
-      }
-
-      if (!clusters.some(cluster => cluster.includes(neighbor))) {
-        clusters[clusterId].push(neighbor);
-      }
-    });
-  }
-
-  points.forEach(point => {
-      if (point.visited) return;
-
-      point.visited = true;
-      const neighborPoints = regionQuery(point);
-
-      if (neighborPoints.length < minPts) {
-          noise.push(point);
-      } else {
-          clusters.push([]);
-          expandCluster(point, neighborPoints, clusters.length - 1);
-      }
-  });
-
-  return clusters;
-}
-
-function KMeans(data, k, maxNumIters=10000) {
-  /*
-    Эвристика для генерации центроид
-    Каждый следующий центр выбираем из случайного распределения 
-    на объектах выборки, в котором вероятность выбрать объект пропорциональна 
-    квадрату расстояния от него до ближайшего к нему центра кластера.
-  */
-  function generateCentroids(k, data) {
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function calculateDistance(point1, point2) {
-      return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
-    }
-
-    function getClosestCentroidIndex(point, centroids) {
-      let minDistance = Infinity;
-      let closestCentroidIndex = null;
-      
-      centroids.forEach((centroid, index) => {
-        const distance = calculateDistance(point, centroid);
-        if (distance < minDistance) {
-            minDistance = distance;
-            closestCentroidIndex = index;
-        }
-      });
-        
-      return closestCentroidIndex;
-    }
-
-    // Generate the first centroid randomly
-    const centroids = [{
-      x: getRandomInt(30, 670),
-      y: getRandomInt(30, 670)
-    }];
-
-    // Generate the rest of the centroids
-    for (let i = 1; i < k; i++) {
-      let distances = data.map((point) => Math.pow(calculateDistance(point, centroids[getClosestCentroidIndex(point, centroids)]), 2));
-      
-      let sumDistances = distances.reduce((acc, val) => acc + val, 0);
-      let probabilities = distances.map((distance) => distance / sumDistances);
-      
-      let randomValue = Math.random() * sumDistances;
-      let index = 0;
-      
-      while (randomValue > 0) {
-          randomValue -= distances[index];
-          index++;
-      }
-      
-      centroids.push(data[index - 1]);
-    }
-
-    return centroids;
-  }
-
-  let centroids = generateCentroids(k, data);
-  console.log("Centroids:", centroids);
-
-  let clusters = [];
-
-  // Определение расстояния между двумя точками
-  function distance(pointA, pointB) {
-    const dx = pointA.x - pointB.x;
-    const dy = pointA.y - pointB.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  // Функция для поиска ближайшего центроида для заданной точки
-  function findClosestCentroid(point) {
-    let closestCentroid = null;
-    let minDistance = Infinity;
-    
-    centroids.forEach((centroid, index) => {
-      const dist = distance(centroid, point);
-      if (dist < minDistance) {
-        closestCentroid = index;
-        minDistance = dist;
-      }
-    });
-    
-    return closestCentroid;
-  }
-
-  // Проводим итерации
-  for (let i = 0; i < maxNumIters; i++) {
-    const prevClusters = JSON.stringify(clusters);
-    clusters = new Array(k).fill().map(() => []);
-    
-    data.forEach((point) => {
-      const closestCentroid = findClosestCentroid(point);
-      clusters[closestCentroid].push(point);
-    });
-
-    // Пересчет положений центроидов
-    const newCentroids = [];
-    
-    clusters.forEach(cluster => {
-      const clusterSize = cluster.length;
-      let sumX = 0;
-      let sumY = 0;
-      
-      cluster.forEach(point => {
-        sumX += point.x;
-        sumY += point.y;
-      });
-      
-      newCentroids.push({
-        x: sumX / clusterSize,
-        y: sumY / clusterSize
-      });
-    });
-
-    // Обновляем положения центроидов
-    centroids = newCentroids;
-  }
-
-  return clusters;
-}
 
 function roundedRectPath(x, y, w, h, r) {
   r = (Math.min(w, h) /2  > r) ? r : Math.min(w, h) / 2;
@@ -303,7 +38,6 @@ function plotDot(x, y, color='white', epsilon=0, isInput=false) {
 function coloring(clasters, k, epsilon=0) {
   const colors = ["#F73A4B", "#7000FF", "#3AC7F7", "#FFA7A7", "#59D499"];
 
-  console.log("Clasters: ", clasters);
   let currentLenght = 0;
   for (let i = 0; i < k; i++) {
     for (let dot in clasters[i]) {
@@ -360,12 +94,12 @@ function buttonProcessing() {
   // Очистка canvas
   context.clearRect(0, 0, canvas.width, canvas.height);
 
-  var numClasters = Number(document.getElementById('K_range').value);
-  var epsilonValue = Number(document.getElementById('epsilon_range').value);
+  let numClasters = Number(document.getElementById('K_range').value);
+  let epsilonValue = Number(document.getElementById('epsilon_range').value);
 
-  let KmeanClasters = KMeans(data, numClasters);
-  let DBSCANClasters = DBSCAN(data, epsilonValue);
-  let connectedComponentsClasters = findConnectedComponents(data);
+  const KmeanClasters = KMeans(data, numClasters);
+  const DBSCANClasters = DBSCAN(data, epsilonValue);
+  const connectedComponentsClasters = findConnectedComponents(data);
 
   coloring(KmeanClasters, numClasters, 0);
   coloring(DBSCANClasters, DBSCANClasters.length, 10);
