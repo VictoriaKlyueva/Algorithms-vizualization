@@ -6,7 +6,6 @@ const canvas = document.getElementById("canvas_decision_tree");
 const context = canvas.getContext('2d');
 
 const width = canvas.width;
-const height = canvas.height;
 
 let tree;
 
@@ -60,7 +59,6 @@ function createCanvasTree(tree) {
       const children = node[mainText];
       const childCount = Object.keys(children).length;
       const childWidth = nodeWidth / childCount;
-      const childHeight = nodeHeight / 2;
       const childMargin = 90;
 
       let childX = x - childCount / 2 * (childWidth + childMargin);
@@ -88,23 +86,22 @@ function createCanvasTree(tree) {
 }
 
 // Загрузка обучающей выборки по нажатию кнопки и построение дерева
-const actualBtn = document.getElementById('actual-btn');
-
-actualBtn.addEventListener('change', function() {
+const trainBtn = document.getElementById('train-btn');
+trainBtn.addEventListener('change', function() {
   const reader = new FileReader();
   
   reader.onload = function(e) {
     // Очистка canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    const csv = e.target.result;
-    const rows = csv.split('\n');
+    let csv = e.target.result;
+    let rows = csv.split('\n');
 
     let features = [];
-    const dataArray = [];
+    let dataArray = [];
 
     for (let i = 0; i < rows.length; i++) {
-      const row = rows[i].split(',');
+      let row = rows[i].split(',');
       if (i === 0) {
         features = row;
       }
@@ -128,12 +125,40 @@ actualBtn.addEventListener('change', function() {
   reader.readAsText(this.files[0]);
 });
 
+// Загрузка тестовой выборки по нажатию кнопки и построение дерева
+const testBtn = document.getElementById('test-btn');
+testBtn.addEventListener('change', function() {
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    let csv = e.target.result;
+    let rows = csv.split('\n');
 
+    let features = [];
+    let dataArray = [];
 
-// // Очистка канваса по нажатию кнопки
-// document.getElementById('tree_reset').onclick = resetProcessing;
-// function resetProcessing() {
-//   const context = canvas.getContext('2d');
-//   context.clearRect(0, 0, canvas.width, canvas.height);
-//   tree = {};
-// }
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i].split(',');
+      if (i === 0) {
+        features = row;
+      }
+      else {
+        dataArray.push(row);
+      }
+    }
+    
+    let predict = predict(tree, features, dataArray);
+    console.log(predict);
+    document.getElementsByClassName("tree_predict")[0].innerHTML = "Вердикт: " +  prediction;
+  };
+
+  reader.readAsText(this.files[0]);
+});
+
+// Очистка канваса по нажатию кнопки
+document.getElementById('tree_reset').onclick = resetProcessing;
+function resetProcessing() {
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  tree = {};
+}

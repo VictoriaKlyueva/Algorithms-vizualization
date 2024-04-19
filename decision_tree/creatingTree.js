@@ -22,9 +22,9 @@ function splitDataset(dataSet, axis, value) {
   let retDataSet = [];
   for (let featVec of dataSet) {
       if (featVec[axis] === value) {
-          let reducedFeatVec = featVec.slice();
-          reducedFeatVec.splice(axis, 1);
-          retDataSet.push(reducedFeatVec);
+        let reducedFeatVec = featVec.slice();
+        reducedFeatVec.splice(axis, 1);
+        retDataSet.push(reducedFeatVec);
       }
   }
   return retDataSet;
@@ -102,7 +102,6 @@ export function createTree(dataset, features) {
 }
   
 export function predict(inputTree, features, testVec) {
-  console.log(inputTree);
   function classify(inputTree, testDict) {
     let key = Object.keys(inputTree)[0];
     let subtree = inputTree[key];

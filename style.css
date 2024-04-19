@@ -258,6 +258,19 @@ div.predict {
     padding-left: 30px;
 }
 
+div.tree_predict {
+    height: 20%;
+    border: 2px solid rgba(143, 141, 145, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+
+    font-family: "InterMedium";
+    font-size: 45px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
 div.received_data {
     height: 53%;
     display: flex;

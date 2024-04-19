@@ -68,7 +68,7 @@ canvas.addEventListener("mouseup", function(e) {
   let image = getImage(context, w, h);
 
   // Сжатие изображения до 28 x 28
-  let compressedImage = compressPhoto(image, 700, 700, 28, 28);;
+  let compressedImage = compressPhoto(image, 700, 700, 28, 28);
   
   // Вывод предсказания модели
   const prediction = makePrediction(model, compressedImage);
