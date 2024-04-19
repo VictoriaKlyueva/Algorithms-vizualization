@@ -102,6 +102,7 @@ export function createTree(dataset, features) {
 }
   
 export function predict(inputTree, features, testVec) {
+  console.log(inputTree);
   function classify(inputTree, testDict) {
     let key = Object.keys(inputTree)[0];
     let subtree = inputTree[key];
@@ -121,6 +122,7 @@ export function predict(inputTree, features, testVec) {
   for (let i = 0; i < features.length; i++) {
     testDict[features[i]] = testVec[i];
   }
+
   return classify(inputTree, testDict);
 }
   

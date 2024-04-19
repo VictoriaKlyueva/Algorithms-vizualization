@@ -87,9 +87,8 @@ function createCanvasTree(tree) {
   drawNode(rootNode, 0, rootX, rootY);
 }
 
-// Загрузка обучающей выборки по нажатию кнопки
+// Загрузка обучающей выборки по нажатию кнопки и построение дерева
 const actualBtn = document.getElementById('actual-btn');
-const input = document.querySelector("input");
 
 actualBtn.addEventListener('change', function() {
   const reader = new FileReader();
@@ -106,7 +105,6 @@ actualBtn.addEventListener('change', function() {
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i].split(',');
-      console.log(row);
       if (i === 0) {
         features = row;
       }
@@ -117,21 +115,25 @@ actualBtn.addEventListener('change', function() {
 
     tree = createTree(dataArray, features);
 
-    console.log(tree);
+    console.log("Tree structure: ", tree);
 
     context.scale(0.8 * tree.size, 0.8 * tree.size)
     printTree(tree);
 
     createCanvasTree(tree);
+
+    console.log(predict(tree, features, dataArray));
   };
 
   reader.readAsText(this.files[0]);
 });
 
-// Очистка канваса по нажатию кнопки
-document.getElementById('tree_reset').onclick = resetProcessing;
-function resetProcessing() {
-  const context = canvas.getContext('2d');
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  tree = {};
-}
+
+
+// // Очистка канваса по нажатию кнопки
+// document.getElementById('tree_reset').onclick = resetProcessing;
+// function resetProcessing() {
+//   const context = canvas.getContext('2d');
+//   context.clearRect(0, 0, canvas.width, canvas.height);
+//   tree = {};
+// }
