@@ -125,36 +125,6 @@ trainBtn.addEventListener('change', function() {
   reader.readAsText(this.files[0]);
 });
 
-// Загрузка тестовой выборки по нажатию кнопки и построение дерева
-const testBtn = document.getElementById('test-btn');
-testBtn.addEventListener('change', function() {
-  const reader = new FileReader();
-  
-  reader.onload = function(e) {
-    let csv = e.target.result;
-    let rows = csv.split('\n');
-
-    let features = [];
-    let dataArray = [];
-
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i].split(',');
-      if (i === 0) {
-        features = row;
-      }
-      else {
-        dataArray.push(row);
-      }
-    }
-    
-    let predict = predict(tree, features, dataArray);
-    console.log(predict);
-    document.getElementsByClassName("tree_predict")[0].innerHTML = "Вердикт: " +  prediction;
-  };
-
-  reader.readAsText(this.files[0]);
-});
-
 // Очистка канваса по нажатию кнопки
 document.getElementById('tree_reset').onclick = resetProcessing;
 function resetProcessing() {

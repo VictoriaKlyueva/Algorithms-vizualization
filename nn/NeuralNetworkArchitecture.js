@@ -100,7 +100,7 @@ export class NeuralNetwork {
   }
   
   matrixMultiply(firstMatrix, secondMatrix) {
-    let result = Array(firstMatrix.length)
+    let result = Array(firstMatrix.length).fill(0);
     for (let i = 0; i < firstMatrix.length; i++) {
       let sum = 0;
       for (let j = 0; j < firstMatrix[0].length; j++) {
@@ -120,8 +120,8 @@ export function makePrediction(model, image) {
 
     for (let i = 0; i < 10; i++) {
         if (probs[i] > maxValue) {
-        maxValue = probs[i];
-        maxIndex = i;
+          maxValue = probs[i];
+          maxIndex = i;
         }
     }
 
